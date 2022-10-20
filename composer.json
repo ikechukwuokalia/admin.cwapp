@@ -27,7 +27,7 @@
   "require-dev": {},
   "autoload": {
     "psr-4": {
-      "IO\\" : "src/",
+      "IO\\Admin\\" : "src/",
       "Bosh\\Admin\\" : "src/"
     },
     "files" : []
