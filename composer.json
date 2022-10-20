@@ -28,10 +28,8 @@
   "autoload": {
     "psr-4": {
       "IO\\" : "src/",
-      "Catali\\Admin\\" : "src/"
+      "Bosh\\Admin\\" : "src/"
     },
-    "files" : [
-      "src/Helper.php"
-    ]
+    "files" : []
   }
 }
