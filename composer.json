@@ -1,8 +1,8 @@
 {
-  "name": "ikechukwuokalia/base-admin.cwapp",
+  "name": "ikechukwuokalia/admin.cwapp",
   "description": "Admin portal base web app for Catali Web OS",
   "keywords": ["email","service", "io", "ikechukwu", "okalia", "catali"],
-  "homepage": "https://github.com/ikechukwuokalia/base-admin.cwapp",
+  "homepage": "https://github.com/ikechukwuokalia/admin.cwapp",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -22,14 +22,16 @@
     "tymfrontiers-cdn/php-multiform" : ">=0.1@stable",
     "tymfrontiers-cdn/php-file" : ">=0.1@stable",
     "ikechukwuokalia/helper.cwapp" : ">=0.1@stable",
-    "ikechukwuokalia/fileman.cwapp" : ">=0.1@stable"
+    "ikechukwuokalia/fileman.cwapp" : ">=0.1@stable",
+    "ikechukwuokalia/email-service.cwapp" : ">=0.1@stable"
   },
   "require-dev": {},
   "autoload": {
     "psr-4": {
-      "IO\\Admin\\" : "src/",
-      "Bosh\\Admin\\" : "src/"
+      "IO\\Admin\\" : "src/"
     },
-    "files" : []
+    "files" : [
+      "src/Helper.php"
+    ]
   }
 }

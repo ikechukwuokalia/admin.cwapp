@@ -1,12 +1,11 @@
 <?php
-namespace IO\Admin;
+namespace IO;
 use \TymFrontiers\Data,
     \TymFrontiers\MySQLDatabase,
     \TymFrontiers\Session,
     \TymFrontiers\MultiForm,
     \TymFrontiers\Validator;
 
-use function IO\get_constant;
 use function \get_database;
 use function \query_conn;
 
