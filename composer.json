@@ -28,7 +28,7 @@
   "require-dev": {},
   "autoload": {
     "psr-4": {
-      "IO\\Admin\\" : "src/"
+      "IO\\" : "src/"
     },
     "files" : [
       "src/Helper.php"

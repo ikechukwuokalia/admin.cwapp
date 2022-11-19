@@ -14,18 +14,19 @@ class Admin{
   protected static $_primary_key='code';
   protected static $_db_name;
   protected static $_table_name = "users";
-	protected static $_db_fields = ["code", "status", "user", "name", "surname", "password", "work_group", "_author", "_created"];
+	protected static $_db_fields = ["code", "status", "user", "name", "surname", "email", "phone", "password", "work_group", "_author", "_created"];
   protected static $_prop_type = [];
   protected static $_prop_size = [];
-
-  const SERVER_NAME = "CWS";
-  const CODE_PREFIX = "052";
+  protected static $_prefix_code = "052";
+  protected static $_server_name;
 
   private $code;
   protected $status = "ACTIVE";
-  public $user;
+  public $user = NULL;
   public $name;
   public $surname;
+  public $email;
+  public $phone;
   public $password;
   public $work_group = "USER";
 
@@ -35,25 +36,28 @@ class Admin{
   public $errors = [];
 
   function __construct($conn = false) {
-    if (!self::$_db_name = get_database(self::SERVER_NAME, "admin")) throw new \Exception("[base] type database not set for server [CWS]", 1);
+    if (!self::$_server_name = get_constant("PRJ_SERVER_NAME")) throw new \Exception("Server-name constant was not defined", 1);
+    
+    if (!self::$_db_name = get_database(self::$_server_name, "admin")) throw new \Exception("[admin] type database not set for server [" .self::$_server_name . "]", 1);
     global $database;
     $conn = $conn && $conn instanceof MySQLDatabase ? $conn : ($database && $database instanceof MySQLDatabase ? $database : false);
-    $conn = query_conn(self::SERVER_NAME, $conn);
+    $conn = query_conn(self::$_server_name, $conn);
     self::_setConn($conn);
   }
 
   public static function authenticate(string $code, string $password){
     global $database;
     global $access_ranks;
-    $conn = query_conn(self::SERVER_NAME, $database);
+    $conn = query_conn(self::$_server_name, $database);
     self::_setConn($conn);
-    self::$_db_name = get_database(self::SERVER_NAME, "admin");
+    self::$_db_name = get_database(self::$_server_name, "admin");
 
     $data = new Data();
     $password = $conn->escapeValue($password);
     $valid = new Validator;
-    if (!$code = $valid->pattern($code, ["code","pattern", "/^052([0-9]{4,4})([0-9]{4,4})$/"])) return false;
-    $sql = "SELECT adm.`code`, adm.`status`, adm.work_group, adm.password
+    $prefix = self::$_prefix_code;
+    if (!$code = $valid->pattern($code, ["code","pattern", "/^{$prefix}([0-9]{4,4})([0-9]{4,4})$/"])) return false;
+    $sql = "SELECT adm.`code`, adm.`status`, adm.work_group, adm.password, adm.name, adm.surname
             FROM :db:.:tbl: AS adm
             WHERE adm.`status` IN('ACTIVE','PENDING') 
             AND adm.`code` = '{$code}'
@@ -182,6 +186,22 @@ class Admin{
     return false;
   }
 
+  final public function prefix_code (string $code = ""):string|null {
+    if (!empty($code)) self::$_prefix_code = $code;
+    return self::$_prefix_code;
+  }
+  final public function server_name (string $server_code = ""):string|null {
+    if (!empty($server_code)) self::$_server_name = $server_code;
+    return self::$_server_name;
+  }
+  final public function profile () {
+    if (!empty($this->code) && !empty($this->name)) {
+      $usr = $this;
+      unset($usr->password);
+      return $usr;
+    }
+    return null;
+  }
   final public function code () { return $this->code; }
   final public function status () { return $this->status; }
   final public function author () { return $this->_author; }

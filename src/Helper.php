@@ -1,5 +1,5 @@
 <?php
-namespace IO;
+namespace IO\Admin;
 use \TymFrontiers\Data,
     \TymFrontiers\MySQLDatabase,
     \TymFrontiers\Session,
@@ -8,6 +8,7 @@ use \TymFrontiers\Data,
 
 use function \get_database;
 use function \query_conn;
+use function IO\get_constant;
 
 // Profile functions
 function log_session (string $type = "LOGIN") {
