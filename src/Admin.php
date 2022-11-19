@@ -1,6 +1,7 @@
 <?php
 namespace IO;
 
+use stdClass;
 use \TymFrontiers\Data,
     \TymFrontiers\MySQLDatabase,
     \TymFrontiers\InstanceError,
@@ -14,7 +15,7 @@ class Admin{
   protected static $_primary_key='code';
   protected static $_db_name;
   protected static $_table_name = "users";
-	protected static $_db_fields = ["code", "status", "user", "name", "surname", "email", "phone", "password", "work_group", "_author", "_created"];
+	protected static $_db_fields = ["code", "status", "user", "name", "surname", "email", "phone", "password", "work_group", "country_code", "_author", "_created"];
   protected static $_prop_type = [];
   protected static $_prop_size = [];
   protected static $_prefix_code = "052";
@@ -29,6 +30,7 @@ class Admin{
   public $phone;
   public $password;
   public $work_group = "USER";
+  public $country_code;
 
   protected $_author;
   protected $_created;
@@ -48,6 +50,7 @@ class Admin{
   public static function authenticate(string $code, string $password){
     global $database;
     global $access_ranks;
+    self::$_server_name = get_constant("PRJ_SERVER_NAME");
     $conn = query_conn(self::$_server_name, $database);
     self::_setConn($conn);
     self::$_db_name = get_database(self::$_server_name, "admin");
@@ -56,9 +59,18 @@ class Admin{
     $password = $conn->escapeValue($password);
     $valid = new Validator;
     $prefix = self::$_prefix_code;
+    $file_db = get_database(self::$_server_name, "file");
+    $file_tbl = "file_meta";
+    $file_server = get_constant("PRJ_FILE_SERVER");
+
     if (!$code = $valid->pattern($code, ["code","pattern", "/^{$prefix}([0-9]{4,4})([0-9]{4,4})$/"])) return false;
-    $sql = "SELECT adm.`code`, adm.`status`, adm.work_group, adm.password, adm.name, adm.surname
+    $sql = "SELECT adm.`code`, adm.`status`, adm.work_group, adm.password, adm.name, adm.surname, adm.email, adm.phone, adm.country_code,
+                  (
+                    SELECT CONCAT('{$file_server}/',f._name)
+                  ) AS avatar
             FROM :db:.:tbl: AS adm
+            LEFT JOIN `{$file_db}`.`file_default` AS fd ON fd.`user` = adm.`code` AND fd.set_key = 'USER.AVATAR'
+            LEFT JOIN `{$file_db}`.`{$file_tbl}` AS f ON f.id = fd.file_id
             WHERE adm.`status` IN('ACTIVE','PENDING') 
             AND adm.`code` = '{$code}'
             AND adm.password IS NOT NULL
@@ -68,7 +80,7 @@ class Admin{
     if( $record && $user = $result_array[0]->profile()){
       // $user = $user[0];
       $usr = new \StdClass();
-      $user->avatar = $user->avatar;
+      $user->avatar = !empty($result_array[0]->avatar) ? $result_array[0]->avatar : $file_server . "/app/ikechukwuokalia/admin.cwapp/img/default-avatar.png";
       $usr->code = $usr->uniqueid = $user->code;
       $usr->access_group = $user->work_group;
       $usr->access_rank = $access_ranks[$user->work_group];
@@ -196,8 +208,15 @@ class Admin{
   }
   final public function profile () {
     if (!empty($this->code) && !empty($this->name)) {
-      $usr = $this;
-      unset($usr->password);
+      $usr = new stdClass();
+      $usr->code = $this->code();
+      $usr->status = $this->status();
+      $usr->work_group = $this->work_group;
+      $usr->name = $this->name;
+      $usr->surname = $this->surname;
+      $usr->email = $this->email;
+      $usr->phone = $this->phone;
+      $usr->country_code = $this->country_code;
       return $usr;
     }
     return null;

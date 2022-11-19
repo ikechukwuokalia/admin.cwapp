@@ -93,7 +93,7 @@ if( !$user ){
 //                 LIMIT 1");
 //   if (!$last_login) {
 //     $email = false;
-//     if ($email = (new MultiForm(get_database("CWS", "admin"), "users", "code", $database))->findBySql("SELECT email FROM `{$base_db}`.`users` WHERE `code` = (SELECT `user` FROM :db:.:tbl: WHERE `code` = '{$params['code']}' LIMIT 1) LIMIT 1")) {
+//     if ($email = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "users", "code", $database))->findBySql("SELECT email FROM `{$base_db}`.`users` WHERE `code` = (SELECT `user` FROM :db:.:tbl: WHERE `code` = '{$params['code']}' LIMIT 1) LIMIT 1")) {
 //       // find email
 //       $email = $email[0]->email;
 //     } else {
@@ -151,13 +151,13 @@ if( !$user ){
 //   }
 // }
 $remember = !(bool)$params['remember'] ? \strtotime("+ 1 Hour") : \strtotime("+ 24 Hours");
-$max_access = access_type($user->access_group);
+$max_access = Admin\access_type($user->access_group);
 if (\is_array($max_access) && \count($max_access) > 1 ) {
   $user->access_group = $max_access[0];
   $user->access_rank = $max_access[1];
 }
 $session->login($user,$remember);
-log_session("LOGIN"); // log
+Admin\log_session("LOGIN"); // log
 if (!$db_user = get_dbuser(get_constant("PRJ_SERVER_NAME"), $session->access_group()) ) $db_user = get_dbuser(get_constant("PRJ_SERVER_NAME"), "USER");
 @ $database->closeConnection();
 $database = new MySQLDatabase(get_dbserver(get_constant("PRJ_SERVER_NAME")), $db_user[0], $db_user[1]);

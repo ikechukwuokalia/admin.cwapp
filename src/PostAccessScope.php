@@ -39,7 +39,7 @@ if ( !$gen->checkCSRF($params["form"],$params["CSRF_token"]) ) {
   exit;
 }
 include PRJ_ROOT . "/src/Pre-Process.php";
-$db_name = get_database("CWS", "data");
+$db_name = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data");
 
 $is_new = $params['task'] == 'CREATE';
 $scope = $is_new

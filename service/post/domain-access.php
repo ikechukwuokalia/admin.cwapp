@@ -27,15 +27,15 @@ if (!empty($params["domain"])) $params["domain"] = $database->escapeValue($param
 if (!empty($params["user"])) $params["user"] = $database->escapeValue(\str_replace(["-", " ", ".", "_"],"",$params["user"]));
 $access = false;
 if( $params ):
-  if( $access = (new MultiForm(get_database("CWS", "admin"),'path_access','id'))
+  if( $access = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"),'path_access','id'))
     ->findBySql("SELECT * FROM :db:.:tbl: WHERE `user` = '{$params['user']}' AND `domain` = '{$params['domain']}' AND `type` = 'DOMAIN' LIMIT 1") ){
     $access = $access[0];
   }
 endif;
-if (!$access_types = (new MultiForm(get_database("CWS", "data"), "access_types", "name"))
+if (!$access_types = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"), "access_types", "name"))
   ->findBySql("SELECT * FROM :db:.:tbl: WHERE `rank` > 1 ORDER BY `rank` ASC")) {
     $errors[] = "No access types found, contact Dev";
-  } if (!$user = (new MultiForm(get_database("CWS", "admin"), "users", "code"))->findById($params['user'])) {
+  } if (!$user = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "users", "code"))->findById($params['user'])) {
     $errors[] = "No record was found for [user] '{$params['user']}'";
   } else if ($user->status !== "ACTIVE") {
     $errors[] = "[user]'s account is not active.";

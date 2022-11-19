@@ -84,7 +84,7 @@ $page_name = "path-access";
               <select name="domain" id="query-domain" required>
                 <option value="">* Choose domain</option>
                 <optgroup label="Work domains">
-                  <?php if ($domains = (new MultiForm(get_database("CWS", "admin"), "work_domains", "name"))->findBySql("SELECT * FROM :db:.:tbl: WHERE `name` IN (SELECT DISTINCT(`domain`) FROM :db:.work_paths) ORDER BY `name` ASC ")) {
+                  <?php if ($domains = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "work_domains", "name"))->findBySql("SELECT * FROM :db:.:tbl: WHERE `name` IN (SELECT DISTINCT(`domain`) FROM :db:.work_paths) ORDER BY `name` ASC ")) {
                     foreach ($domains as $dmn) {
                       echo "<option value=\"{$dmn->name}\"";
                         echo ($params && !empty($params['domain']) && $params['domain'] == $dmn->name) ? " selected" : "";

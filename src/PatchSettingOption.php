@@ -37,7 +37,7 @@ if ( !$gen->checkCSRF($params["form"],$params["CSRF_token"]) ) {
   ]);
   exit;
 }
-$db_name = get_database("CWS", "data");
+$db_name = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data");
 include PRJ_ROOT . "/src/Pre-Process.php";
 $option = (new MultiForm($db_name, 'setting_options', 'id', $database))->findById($params['id']);
 

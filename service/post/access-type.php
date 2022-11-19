@@ -21,7 +21,7 @@ if (!$params || !empty($gen->errors)) {
   }
 }
 if( $params ):
-  if( !empty($params['name']) && !$type = (new MultiForm(get_database("CWS", "data"),'access_types','name'))->findById($params['name']) ){
+  if( !empty($params['name']) && !$type = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"),'access_types','name'))->findById($params['name']) ){
     $errors[] = "No record found for given [name]: {$params['name']}";
   }
   if ($type) $type->scope = (!empty($type->scope) ? \explode(",", $type->scope) : []);
@@ -81,7 +81,7 @@ endif;
             </div>
             <div class="grid-12-tablet">
               <h4>Access scope</h4>
-              <?php if ($scopes = (new MultiForm(get_database("CWS", "data"), "access_scopes", "name"))->findBySql("SELECT * FROM :db:.:tbl: ORDER BY `rank` ASC")) {
+              <?php if ($scopes = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"), "access_scopes", "name"))->findBySql("SELECT * FROM :db:.:tbl: ORDER BY `rank` ASC")) {
                 foreach ($scopes as $scope) {
                   echo "<span>";
                     echo "<input type=\"checkbox\" name=\"scope\" id=\"scope-{$scope->name}\" value=\"{$scope->name}\"";

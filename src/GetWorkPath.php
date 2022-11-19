@@ -49,7 +49,7 @@ if ( !$gen->checkCSRF($params["form"],$params["CSRF_token"]) ) {
 }
 $server_name = "BASE";
 $data_db = get_database($server_name, "admin");
-$dt_db = get_database("CWS", "data");
+$dt_db = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data");
 $count = 0;
 $data = new MultiForm($data_db, 'work_paths', 'id', $database);
 $data->current_page = $page = (int)$params['page'] > 0 ? (int)$params['page'] : 1;

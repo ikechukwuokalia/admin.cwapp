@@ -21,7 +21,7 @@ if (!$params || !empty($gen->errors)) {
   }
 }
 if( $params ):
-  if( !empty($params['name']) && !$domain = (new MultiForm(get_database("CWS", "admin"),'work_domains','name'))->findById($params['name']) ){
+  if( !empty($params['name']) && !$domain = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"),'work_domains','name'))->findById($params['name']) ){
     $errors[] = "No record found for given [name]: {$params['name']}";
   }
 endif;

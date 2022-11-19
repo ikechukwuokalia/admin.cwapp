@@ -38,7 +38,7 @@ if ( !$gen->checkCSRF($params["form"],$params["CSRF_token"]) ) {
   ]);
   exit;
 }
-$server_name  = "CWS";
+$server_name  = \IO\get_constant("PRJ_SERVER_NAME");
 $base_db = get_database($server_name, "base");
 $admin_db = get_database($server_name, "admin");
 include \dirname(__DIR__) . "/../helper.cwapp/src/inc-Conn.php";

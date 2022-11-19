@@ -10,7 +10,7 @@ use \TymFrontiers\Generic,
 
 $errors = [];
 $found = false;
-$data_db = get_database("CWS", "data");
+$data_db = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data");
 $count = 0;
 $data = new MultiForm($data_db, 'access_scopes', 'name', $database);
 $data->current_page = $page = 1;

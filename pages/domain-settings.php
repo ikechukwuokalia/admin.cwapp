@@ -11,7 +11,7 @@ $nav_group = "index";
 $page_name = "domain-settings";
 \check_access("READ", "/domain-settings", $work_domain,"", true);
 // get default API app
-$df_domain = get_server_domain("CWS");
+$df_domain = get_server_domain(\IO\get_constant("PRJ_SERVER_NAME"));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,7 +69,7 @@ $df_domain = get_server_domain("CWS");
               <label for="query-domain"> <i class="fas fa-globe"></i> Domain</label>
               <select name="domain" required id="query-domain">
                 <optgroup label="Work Domains">
-                  <?php if ($domains = (new MultiForm(get_database("CWS", "admin"), "work_domains", "name", $database))->findAll()) {
+                  <?php if ($domains = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "work_domains", "name", $database))->findAll()) {
                     foreach ($domains as $dmn) {
                       echo "<option value=\"{$dmn->name}\" title=\"{$dmn->description}\"";
                         echo $df_domain == $dmn->name ? " selected" : "";

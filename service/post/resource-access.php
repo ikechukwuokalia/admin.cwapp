@@ -24,7 +24,7 @@ if (!$params || !empty($gen->errors)) {
   }
 }
 if( $params ):
-  if( !empty($params['id']) && !$access = (new MultiForm(get_database("CWS", "data"),'resource_access','id'))->findById($params['id']) ){
+  if( !empty($params['id']) && !$access = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"),'resource_access','id'))->findById($params['id']) ){
     $errors[] = "No record found for given [id]: {$params['id']}";
   } if ($access) {
     if ($access->resource !== $params['resource']) {
@@ -78,7 +78,7 @@ endif;
                   <select name="group_name" id="post-group-name" required>
                     <option value="">* Choose group</option>
                     <optgroup label="Groups">
-                      <?php if ($groups = (new MultiForm(get_database("CWS", "data"), "access_types", "name", $database))->findBySql("SELECT * FROM :db:.:tbl: WHERE `rank` > 1 AND `name` NOT IN (SELECT `group_name` FROM :db:.resource_access WHERE `resource` = '{$database->escapeValue($params['resource'])}') ORDER BY `rank` ASC")) {
+                      <?php if ($groups = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"), "access_types", "name", $database))->findBySql("SELECT * FROM :db:.:tbl: WHERE `rank` > 1 AND `name` NOT IN (SELECT `group_name` FROM :db:.resource_access WHERE `resource` = '{$database->escapeValue($params['resource'])}') ORDER BY `rank` ASC")) {
                         foreach ($groups as $grp) {
                           echo "<option value=\"{$grp->name}\" title=\"{$grp->description}\">{$grp->title}</option>";
                         }
@@ -91,7 +91,7 @@ endif;
 
             <div class="grid-12-tablet">
               <h3>Access scope(s)</h3>
-              <?php if ($scopes = (new MultiForm(get_database("CWS", "data"), "access_scopes", "name", $database))->findBySql("SELECT * FROM :db:.:tbl: ORDER BY `rank`")) {
+              <?php if ($scopes = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"), "access_scopes", "name", $database))->findBySql("SELECT * FROM :db:.:tbl: ORDER BY `rank`")) {
                 foreach ($scopes as $scope) {
                   echo "<span>";
                     echo "<input type=\"checkbox\" name=\"scope\" id=\"scope-{$scope->name}\" value=\"{$scope->name}\"";

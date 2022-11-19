@@ -125,7 +125,7 @@ $enc_key = $setting ? encKey(domain_server($params['domain'])) : "";
               <select name="domain" required>
                 <option value="">* Setting domain</option>
                 <optgroup label="Domains">
-                  <?php if ($domains = (new MultiForm(get_database("CWS", "admin"), "work_domains", "name"))->findAll()) {
+                  <?php if ($domains = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "work_domains", "name"))->findAll()) {
                     foreach ($domains as $dmn) {
                       echo " <option value=\"{$dmn->name}\" title=\"{$dmn->description}\" ";
                         echo $setting && $params["domain"] == $dmn->name ? ' selected' : '';

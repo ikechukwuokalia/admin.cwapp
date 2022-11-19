@@ -100,13 +100,13 @@ function listUser (users) {
       html += `<td>`;
           let btns = [];
           if (usr.status == "ACTIVE") {
-            btns.push(`<button onclick="patchUsr('${usr.code}', 'BANNED');" type="button" class="theme-button mini red no-shadow" title="ban"><i class="far fa-ban"></i> Ban user</button>`);
+            btns.push(`<button onclick="patchUsr('${usr.code}', 'BANNED');" type="button" class="theme-button mini red no-shadow" title="ban"><i class="fas fa-ban"></i> Ban user</button>`);
 
-            btns.push(`<button onclick="patchUsr('${usr.code}', 'SUSPEND');" type="button" class="theme-button mini amber no-shadow" title="Suspend"><i class="far fa-traffic-light-stop"></i> Suspend</button>`);
+            btns.push(`<button onclick="patchUsr('${usr.code}', 'SUSPEND');" type="button" class="theme-button mini amber no-shadow" title="Suspend"><i class="fas fa-traffic-light-stop"></i> Suspend</button>`);
           } if (usr.status == "REQUESTING") {
-            btns.push(`<button onclick="cwos.faderBox.url('/index/accept-user', {code:'${usr.code}'}, {exitBtn: true});" type="button" class="theme-button mini green no-shadow" title="Accept user"><i class="far fa-check-circle"></i> Accept</button>`);
+            btns.push(`<button onclick="cwos.faderBox.url('/index/accept-user', {code:'${usr.code}'}, {exitBtn: true});" type="button" class="theme-button mini green no-shadow" title="Accept user"><i class="fas fa-check-circle"></i> Accept</button>`);
 
-            btns.push(`<button onclick="patchUsr('${usr.code}', 'REJECTED');" type="button" class="theme-button mini red no-shadow" title="Reject user"><i class="far fa-times"></i> Reject</button>`);
+            btns.push(`<button onclick="patchUsr('${usr.code}', 'REJECTED');" type="button" class="theme-button mini red no-shadow" title="Reject user"><i class="fas fa-times"></i> Reject</button>`);
           }
         html += btns.join(" ");
       html += `</td>`;
@@ -141,13 +141,13 @@ function lsStOpt (options) {
       html += `<td>`;
           let btns = [];
           if (opt.enabled == true) {
-            btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/setting-option', {id:${opt.id}, callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="far fa-edit"></i> Edit</button>`);
+            btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/setting-option', {id:${opt.id}, callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="fas fa-edit"></i> Edit</button>`);
             
-            btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/domain-setting', {key:'${opt.name}'}, {exitBtn:true});" type="button" class="theme-button mini olive no-shadow"><i class="far fa-cog"></i> Set</button>`);
+            btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/domain-setting', {key:'${opt.name}'}, {exitBtn:true});" type="button" class="theme-button mini olive no-shadow"><i class="fas fa-cog"></i> Set</button>`);
 
-            btns.push(`<button onclick="patchOpt(${opt.id}, false);" type="button" class="theme-button mini red no-shadow" title="Disable"><i class="far fa-ban"></i> Disable</button>`);
+            btns.push(`<button onclick="patchOpt(${opt.id}, false);" type="button" class="theme-button mini red no-shadow" title="Disable"><i class="fas fa-ban"></i> Disable</button>`);
           } else {
-            btns.push(`<button onclick="patchOpt(${opt.id}, true);" type="button" class="theme-button mini green no-shadow" title="Enable"><i class="far fa-check-circle"></i> Enable</button>`);
+            btns.push(`<button onclick="patchOpt(${opt.id}, true);" type="button" class="theme-button mini green no-shadow" title="Enable"><i class="fas fa-check-circle"></i> Enable</button>`);
           }
         html += btns.join(" ");
       html += `</td>`;
@@ -173,11 +173,11 @@ function lsWkDomain (domains) {
       html += `<td> ${dmn.paths}</td>`;
       html += `<td>`;
       let btns = [];
-      btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/work-domain', {name:'${dmn.name}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="far fa-edit"></i> Edit</button>`);
+      btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/work-domain', {name:'${dmn.name}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="fas fa-edit"></i> Edit</button>`);
       
-      btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/work-path', {domain:'${dmn.name}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini amber no-shadow"><i class="far fa-plus"></i> Work path</button>`);
+      btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/work-path', {domain:'${dmn.name}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini amber no-shadow"><i class="fas fa-plus"></i> Work path</button>`);
       
-      btns.push(`<button onclick="delWkDomain('${dmn.name}');" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="far fa-trash"></i> Delete</button>`);
+      btns.push(`<button onclick="delWkDomain('${dmn.name}');" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="fas fa-trash"></i> Delete</button>`);
       html += btns.join(" ");
       html += `</td>`;
     html += "</tr>";
@@ -202,10 +202,10 @@ function lsWkPath (paths) {
       html += `<td> ${pth.navVisible == true ? "ON" : "OFF"}</td>`;
       html += `<td>`;
       let btns = [];
-      btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/work-path', {id:${pth.id}, callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="far fa-edit"></i> Edit</button>`);
+      btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/work-path', {id:${pth.id}, callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="fas fa-edit"></i> Edit</button>`);
       
       
-      btns.push(`<button onclick="delWkPath(${pth.id});" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="far fa-trash"></i> Delete</button>`);
+      btns.push(`<button onclick="delWkPath(${pth.id});" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="fas fa-trash"></i> Delete</button>`);
       html += btns.join(" ");
       html += `</td>`;
     html += "</tr>";
@@ -236,9 +236,9 @@ function lsPathAccess (paths) {
       html += `<td> <code>${pta.accessScope.join(", ")}</code></td>`;
       html += `<td>`;
       let btns = [];
-      btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/${pta.type.toLowerCase()}-access', {path:'${pta.path}', domain:'${pta.domain}', user: '${pta.user}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="far fa-edit"></i> Edit</button>`);
+      btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/${pta.type.toLowerCase()}-access', {path:'${pta.path}', domain:'${pta.domain}', user: '${pta.user}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="fas fa-edit"></i> Edit</button>`);
     
-      btns.push(`<button onclick="delPathAccess(${pta.id});" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="far fa-trash"></i> Delete</button>`);
+      btns.push(`<button onclick="delPathAccess(${pta.id});" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="fas fa-trash"></i> Delete</button>`);
       html += btns.join(" ");
       html += `</td>`;
     html += "</tr>";
@@ -263,9 +263,9 @@ function lsAccessType (types) {
       html += `<td> <code class="color-amber">${atp.scope.join(", ")}</code></td>`;
       html += `<td>`;
         let btns = [];
-        btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/access-type', {name:'${atp.name}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="far fa-edit"></i> Edit</button>`);
+        btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/access-type', {name:'${atp.name}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="fas fa-edit"></i> Edit</button>`);
               
-        btns.push(`<button onclick="delAtp('${atp.name}');" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="far fa-trash"></i> Delete</button>`);
+        btns.push(`<button onclick="delAtp('${atp.name}');" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="fas fa-trash"></i> Delete</button>`);
         html += btns.join(" ");
       html += `</td>`;
     html += "</tr>";
@@ -289,9 +289,9 @@ function lsAcsco (scopes) {
       html += `<td>${asco.description}</td>`;
       html += `<td>`;
         let btns = [];
-        btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/access-scope', {name:'${asco.name}', cb: 'requery1'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="far fa-edit"></i> Edit</button>`);
+        btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/access-scope', {name:'${asco.name}', cb: 'requery1'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="fas fa-edit"></i> Edit</button>`);
               
-        btns.push(`<button onclick="delAcsco('${asco.name}');" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="far fa-trash"></i> Delete</button>`);
+        btns.push(`<button onclick="delAcsco('${asco.name}');" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="fas fa-trash"></i> Delete</button>`);
         html += btns.join(" ");
       html += `</td>`;
     html += "</tr>";
@@ -316,11 +316,11 @@ function lsRcT (types) {
       html += `<td>${tg.description}</td>`;
       html += `<td>`;
         let btns = [];
-        btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/resource-type', {name:'${tg.name}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="far fa-edit"></i> Edit</button>`);
+        btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/resource-type', {name:'${tg.name}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="fas fa-edit"></i> Edit</button>`);
 
-        btns.push(`<button onclick="cwos.faderBox.url('/app/admin/list/resource-access', {resource:'${tg.name}'}, {exitBtn:true});" type="button" class="theme-button mini amber no-shadow"><i class="far fa-cog"></i> Access</button>`);
+        btns.push(`<button onclick="cwos.faderBox.url('/app/admin/list/resource-access', {resource:'${tg.name}'}, {exitBtn:true});" type="button" class="theme-button mini amber no-shadow"><i class="fas fa-cog"></i> Access</button>`);
               
-        btns.push(`<button onclick="delRcT('${tg.name}');" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="far fa-trash"></i> Delete</button>`);
+        btns.push(`<button onclick="delRcT('${tg.name}');" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="fas fa-trash"></i> Delete</button>`);
         html += btns.join(" ");
       html += `</td>`;
     html += "</tr>";
@@ -343,9 +343,9 @@ function lsKwd (keywords) {
       html += `<td>${kwd.type}</td>`;
       html += `<td>`;
         let btns = [];
-        btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/reserved-keyword', {id:${kwd.id}, callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="far fa-edit"></i> Edit</button>`);
+        btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/reserved-keyword', {id:${kwd.id}, callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="fas fa-edit"></i> Edit</button>`);
               
-        btns.push(`<button onclick="delKwd(${kwd.id});" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="far fa-trash"></i> Delete</button>`);
+        btns.push(`<button onclick="delKwd(${kwd.id});" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="fas fa-trash"></i> Delete</button>`);
         html += btns.join(" ");
       html += `</td>`;
     html += "</tr>";
@@ -371,9 +371,9 @@ function lsSetting (settings) {
       html += `<td> ${stt.value}</td>`;
       html += `<td>`;
           let btns = [];
-          btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/domain-setting', {id: ${stt.id}, domain: '${stt.domain}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="far fa-edit"></i> Edit</button>`);
+          btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/domain-setting', {id: ${stt.id}, domain: '${stt.domain}', callback: 'requery'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="fas fa-edit"></i> Edit</button>`);
 
-          btns.push(`<button onclick="delDmnSetting(${stt.id}, '${stt.domain}');" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="far fa-trash"></i> Delete</button>`);
+          btns.push(`<button onclick="delDmnSetting(${stt.id}, '${stt.domain}');" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="fas fa-trash"></i> Delete</button>`);
         html += btns.join(" ");
       html += `</td>`;
     html += "</tr>";
@@ -396,9 +396,9 @@ function lsResAccess (access) {
       html += `<td><code>${acs.scope.join(", ")}</code></td>`;
       html += `<td>`;
           let btns = [];
-          btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/resource-access', {id: ${acs.id}, resource: '${acs.resource}', cb: 'requery1'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="far fa-edit"></i> Edit</button>`);
+          btns.push(`<button onclick="cwos.faderBox.url('/app/admin/post/resource-access', {id: ${acs.id}, resource: '${acs.resource}', cb: 'requery1'}, {exitBtn:true});" type="button" class="theme-button mini blue no-shadow"><i class="fas fa-edit"></i> Edit</button>`);
 
-          btns.push(`<button onclick="delResAccess(${acs.id});" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="far fa-trash"></i> Delete</button>`);
+          btns.push(`<button onclick="delResAccess(${acs.id});" type="button" class="theme-button mini red no-shadow" title="Delete"><i class="fas fa-trash"></i> Delete</button>`);
         html += btns.join(" ");
       html += `</td>`;
     html += "</tr>";

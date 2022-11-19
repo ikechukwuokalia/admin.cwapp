@@ -122,14 +122,14 @@ $result = [
   'nextPage' => $data->hasNextPage() ? $data->nextPage() : false
 ];
 if ($new_conn) $conn->closeConnection();
-// $q_conn = query_conn("CWS");
+// $q_conn = query_conn(\IO\get_constant("PRJ_SERVER_NAME"));
 $enc_list = [];
 $enc_names = [];
 foreach ($found as $f) {
   $enc_names[] = $f->skey;
 } if (!empty($enc_names)) {
   $qs = "SELECT `name`, `encrypt`, `title` FROM :db:.:tbl: WHERE `name` IN ('" . \implode("','", $enc_names) . "')";
-  if ($qf = (new MultiForm(get_database("CWS", "data"), "setting_options", "id", $database))->findBySql($qs)) {
+  if ($qf = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"), "setting_options", "id", $database))->findBySql($qs)) {
     foreach ($qf as $f) {
       $enc_list[$f->name] = [
         "encrypt" => (bool)$f->encrypt,
