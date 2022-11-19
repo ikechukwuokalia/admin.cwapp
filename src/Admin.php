@@ -9,8 +9,7 @@ use \TymFrontiers\Data,
 
 class Admin{
   use \TymFrontiers\Helper\MySQLDatabaseObject,
-      \TymFrontiers\Helper\Pagination,
-      Admin\Profile;
+      \TymFrontiers\Helper\Pagination;
 
   protected static $_primary_key='code';
   protected static $_db_name;
