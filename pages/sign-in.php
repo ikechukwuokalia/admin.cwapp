@@ -29,44 +29,44 @@ if (!$params) HTTP\Header::badRequest(true);
     <!-- Theming styles -->
     <link rel="stylesheet" href="/app/cataliwos/plugin.cwapp/css/font-awesome.min.css">
     <link rel="stylesheet" href="/app/cataliwos/plugin.cwapp/css/theme.min.css">
-  <link rel="stylesheet" href="/app/cataliwos/dashui.cwapp/css/dashui.min.css">
-  <link rel="stylesheet" href="/app/ikechukwuokalia/helper.cwapp/css/helper.min.css">
-  <link rel="stylesheet" href="/assets/css/base.min.css">
+    <link rel="stylesheet" href="/app/cataliwos/dashui.cwapp/css/dashui.min.css">
+    <link rel="stylesheet" href="/app/ikechukwuokalia/helper.cwapp/css/helper.min.css">
+    <link rel="stylesheet" href="/assets/css/base.min.css">
     <script type="text/javascript">
       if (typeof window["param"] == undefined || !window["param"]) window["param"] = {};
       <?php if (!empty($params) && \is_array($params)) { foreach ($params as $k=>$val) { echo "param['{$k}'] = '{$val}';"; } } ?>
-    </script>
+      </script>
   </head>
   <body class="theme-aphalt">
     <input type="hidden" data-setup="page" data-name="sign-in" data-group="admin">
-
+    
     <input type="hidden" data-setup="ui" data-handler="DashUI" data-header="/admin/get/dashui/header?rdt=<?php echo THIS_PAGE; ?>" data-sidebar="/admin/get/dashui/sidebar" data-autoinit="true">
     <input type="hidden" data-setup="uiOption" data-max-cart-item="4" data-max-notice-item="4">
     <input type="hidden" data-setup="uiNotification" data-delete="/app/helper/delete/notification" data-path="/app/user/notifications" data-get="/app/helper/get/notification">
     <input type="hidden" data-setup="uiCart" data-delete="/app/helper/delete/cart" data-path="/index/checkout" data-get="/app/helper/get/cart">
-
+    
     <input type="hidden" data-setup="dnav" data-group="admin" data-clear-elem="#cwos-content" data-pos="affix" data-container="#cwos-content" data-get="/admin/get/navigation" data-ini-top-pos="0" data-stick-on="">
-
+    
     <section id="cwos-content">
       <div class="view-space">
         <div class="padding -p30">&nbsp;</div>
         <div class="grid-10-tablet grid-8-laptop grid-6-desktop center-tablet">
           <div class="paddn -pall -p30 bg-white drop-shadow theme-color asphalt">
             <form 
-                autocomplete="off" 
-                id="admin-sign-in" 
-                method="post"
-                action="/app/admin/src/SignIn.php"
-                data-validate="false"
-                onsubmit="cwos.form.submit(this, signIn); return false;"
-                class="actn-sectn block-ui paddn -pall -p20">
-
-              <input type="hidden" name="CSRF_token" value="<?php echo $session->createCSRFtoken('admin-sign-in-form'); ?>">
-              <input type="hidden" name="form" value="admin-sign-in-form">
-              <input type="hidden" name="rdt" value="<?php echo $params['rdt']; ?>">
-              <input type="hidden" name="otp" value="">
-              <input type="hidden" name="user" value="">
-              <div class="grid-12-tablet">
+            autocomplete="off" 
+            id="admin-sign-in" 
+            method="post"
+            action="/app/admin/src/SignIn.php"
+            data-validate="false"
+            onsubmit="cwos.form.submit(this, signIn); return false;"
+            class="actn-sectn block-ui paddn -pall -p20">
+            
+            <input type="hidden" name="CSRF_token" value="<?php echo $session->createCSRFtoken('admin-sign-in-form'); ?>">
+            <input type="hidden" name="form" value="admin-sign-in-form">
+            <input type="hidden" name="rdt" value="<?php echo $params['rdt']; ?>">
+            <input type="hidden" name="otp" value="">
+            <input type="hidden" name="user" value="">
+            <div class="grid-12-tablet">
                 <h2>Sign in to continue</h2>
                 <p>Enter Login Credentials and hit <b>Sign In</b></p>
               </div>

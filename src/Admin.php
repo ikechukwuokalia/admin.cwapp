@@ -10,20 +10,21 @@ use \TymFrontiers\Data,
 
 class Admin{
   use \TymFrontiers\Helper\MySQLDatabaseObject,
-      \TymFrontiers\Helper\Pagination;
+      \TymFrontiers\Helper\Pagination,
+      Admin\Profile;
 
   protected static $_primary_key='code';
   protected static $_db_name;
   protected static $_table_name = "users";
-	protected static $_db_fields = ["code", "status", "user", "name", "surname", "email", "phone", "password", "work_group", "country_code", "_author", "_created"];
+	protected static $_db_fields = ["code", "status", "name", "surname", "email", "phone", "password", "work_group", "country_code", "dob", "sex", "_author", "_created"];
   protected static $_prop_type = [];
   protected static $_prop_size = [];
   protected static $_prefix_code = "052";
+  protected static $_code_length = 11;
   protected static $_server_name;
 
   private $code;
   protected $status = "ACTIVE";
-  public $user = NULL;
   public $name;
   public $surname;
   public $email;
@@ -31,13 +32,21 @@ class Admin{
   public $password;
   public $work_group = "USER";
   public $country_code;
+  public $dob;
+  public $sex;
 
   protected $_author;
   protected $_created;
 
   public $errors = [];
 
-  function __construct($conn = false) {
+  function __construct($conn = false, $prefix_code = "", $code_len = 0) {
+    $valid = new Validator;
+    if (!empty($prefix_code) && $valid->pattern($prefix_code, ["prefix-code", "pattern", "/^(\d{3,3})$/"])) {
+      self::$_prefix_code = $prefix_code;
+    } if (!empty($code_len) && \is_int($code_len) && $code_len > 10 && $code_len < 16) {
+      self::$_code_length = $code_len;
+    }
     if (!self::$_server_name = get_constant("PRJ_SERVER_NAME")) throw new \Exception("Server-name constant was not defined", 1);
     
     if (!self::$_db_name = get_database(self::$_server_name, "admin")) throw new \Exception("[admin] type database not set for server [" .self::$_server_name . "]", 1);
@@ -50,27 +59,17 @@ class Admin{
   public static function authenticate(string $code, string $password){
     global $database;
     global $access_ranks;
-    self::$_server_name = get_constant("PRJ_SERVER_NAME");
     $conn = query_conn(self::$_server_name, $database);
     self::_setConn($conn);
     self::$_db_name = get_database(self::$_server_name, "admin");
+    $prefix = self::$_prefix_code;
 
     $data = new Data();
     $password = $conn->escapeValue($password);
     $valid = new Validator;
-    $prefix = self::$_prefix_code;
-    $file_db = get_database(self::$_server_name, "file");
-    $file_tbl = "file_meta";
-    $file_server = get_constant("PRJ_FILE_SERVER");
-
-    if (!$code = $valid->pattern($code, ["code","pattern", "/^{$prefix}([0-9]{4,4})([0-9]{4,4})$/"])) return false;
-    $sql = "SELECT adm.`code`, adm.`status`, adm.work_group, adm.password, adm.name, adm.surname, adm.email, adm.phone, adm.country_code,
-                  (
-                    SELECT CONCAT('{$file_server}/',f._name)
-                  ) AS avatar
+    if (!$code = $valid->pattern($code, ["code","pattern", "/^{$prefix}([0-9]{4,4})([0-9]{4,4})([0-9]{1,4})?$/"])) return false;
+    $sql = "SELECT adm.`code`, adm.`status`, adm.work_group, adm.password
             FROM :db:.:tbl: AS adm
-            LEFT JOIN `{$file_db}`.`file_default` AS fd ON fd.`user` = adm.`code` AND fd.set_key = 'USER.AVATAR'
-            LEFT JOIN `{$file_db}`.`{$file_tbl}` AS f ON f.id = fd.file_id
             WHERE adm.`status` IN('ACTIVE','PENDING') 
             AND adm.`code` = '{$code}'
             AND adm.password IS NOT NULL
@@ -80,7 +79,6 @@ class Admin{
     if( $record && $user = $result_array[0]->profile()){
       // $user = $user[0];
       $usr = new \StdClass();
-      $user->avatar = !empty($result_array[0]->avatar) ? $result_array[0]->avatar : $file_server . "/app/ikechukwuokalia/admin.cwapp/img/default-avatar.png";
       $usr->code = $usr->uniqueid = $user->code;
       $usr->access_group = $user->work_group;
       $usr->access_rank = $access_ranks[$user->work_group];
@@ -102,13 +100,13 @@ class Admin{
     }
     return false;
   }
-  public function register(string $work_group, string $user, string $code = ""){
+  public function register(string $work_group, string $code = "", bool $verified = false){
     $conn =& self::$_conn;
-
+    $required = ["name", "surname", "email", "phone", "password", "country_code", "dob", "sex"];
     $data = new Data();
     $unset = [];
-    foreach ($this->_req_params as $prop) {
-      if (empty($user[$prop])) $unset[] = $prop;
+    foreach ($required as $prop) {
+      if ($this->isEmpty($prop, $this->$prop)) $unset[] = $prop;
     }
     if (!empty($unset)) {
       $this->errors["_createNew"][] = [
@@ -118,11 +116,6 @@ class Admin{
         __LINE__
       ];
       return false;
-    }
-    foreach($user as $key=>$val){
-      if( \property_exists(__CLASS__, $key) && !empty($val) ){
-        $this->$key = $conn->escapeValue($val);
-      }
     }
     if ($verified) $this->status = "ACTIVE";
     global $code_prefix;
@@ -136,8 +129,18 @@ class Admin{
         ];
         return false;
       }
-      $prfx = $code_prefix["profile"];
-      $this->code = generate_code($prfx, Data::RAND_NUMBERS, 11, $this, "code", true);
+      $this->code = generate_code(self::$_prefix_code, Data::RAND_NUMBERS, self::$_code_length, $this, "code", true);
+    } else {
+      // validate code
+      if (!(new Validator)->pattern($this->code, ["code", "pattern", "/^{$prefix}([0-9]{4,4})([0-9]{4,4})([0-9]{1,4})?$/"])) {
+        $this->errors["_createNew"][] = [
+          @$GLOBALS['access_ranks']['DEVELOPER'],
+          256,
+          "[code] does not match valid pattern.", __FILE__,
+          __LINE__
+        ];
+        return false;
+      }
     }
     $this->password = $data->pwdHash($this->password);
     // get user connection
@@ -160,18 +163,24 @@ class Admin{
     }
     return false;
   }
-  public function requestAccount (string $user, string $password):bool {
+  public function requestAccount (string $password):bool {
     $this->status = "REQUESTING";
     $this->work_group = "USER";
     $valid = new Validator;
-    if (!$this->user = $valid->pattern($user, ["user","pattern", "/^(252|352)([\d]{4,4})([\d]{4,4})$/"])) {
-      if ($errs = (new InstanceError($valid))->get("pattern", true)) {
-        unset($valid->errors["pattern"]);
-        foreach ($errs as $er) {
-          $this->errors["requestAccount"][] = [0, 256, $er, __FILE__, __LINE__];
-        }
-      }
-    } else if (!$password = $valid->password($password, ["password","password"])) {
+
+    $required = ["name", "surname", "email", "phone", "country_code", "dob", "sex"];
+    $unset = [];
+    foreach ($required as $prop) {
+      if ($this->isEmpty($prop, $this->$prop)) $unset[] = $prop;
+    }
+    if (!empty($unset)) {
+      $this->errors["requestAccount"][] = [
+        0, 256, "Required values [". \implode(", ", $unset) . "] not set", __FILE__,
+        __LINE__
+      ];
+      return false;
+    }
+    if (!$password = $valid->password($password, ["password","password"])) {
       if ($errs = (new InstanceError($valid))->get("password", true)) {
         unset($valid->errors["password"]);
         foreach ($errs as $er) {
@@ -181,45 +190,29 @@ class Admin{
     } else {
       // get ready to create
       $this->password = Data::pwdHash($password);
-      $this->code = generate_code(self::CODE_PREFIX, Data::RAND_NUMBERS, 11, $this, "code", true);
-      $utype = code_storage($user, "BASE");
-      if ($utype && $ustatus = (new MultiForm($utype[0], $utype[1], $utype[2]))->findById($user)) {
-        if ($ustatus->status == "ACTIVE") {
-          $this->name = @ $ustatus->name;
-          $this->surname = @ $ustatus->surname;
-          return $this->_create();
-        } else {
-          $this->errors["requestAccount"][] = [0, 256, "[user] profile is not active.", __FILE__, __LINE__];
-        }
-      } else {
-        $this->errors["requestAccount"][] = [0, 256, "[user] profile was not found.", __FILE__, __LINE__];
-      }
+      $this->code = generate_code(self::$_prefix_code, Data::RAND_NUMBERS, self::$_code_length, $this, "code", true);
+      return $this->_create();
     }
     return false;
   }
 
-  final public function prefix_code (string $code = ""):string|null {
-    if (!empty($code)) self::$_prefix_code = $code;
+  final public function prefix_code (string $prefix_code = ""):string|null {
+    $valid = new Validator;
+    if (!empty($prefix_code) && $valid->pattern($prefix_code, ["prefix-code", "pattern", "/^(\d{3,3})$/"])) {
+      self::$_prefix_code = $prefix_code;
+    }
     return self::$_prefix_code;
   }
+  final public function code_length (int $len = 0):int|null {
+    if (!empty($len) && $len > 10 && $len < 16) {
+      self::$_code_length = $len;
+    }
+    return self::$_code_length;
+  }
+  
   final public function server_name (string $server_code = ""):string|null {
     if (!empty($server_code)) self::$_server_name = $server_code;
     return self::$_server_name;
-  }
-  final public function profile () {
-    if (!empty($this->code) && !empty($this->name)) {
-      $usr = new stdClass();
-      $usr->code = $this->code();
-      $usr->status = $this->status();
-      $usr->work_group = $this->work_group;
-      $usr->name = $this->name;
-      $usr->surname = $this->surname;
-      $usr->email = $this->email;
-      $usr->phone = $this->phone;
-      $usr->country_code = $this->country_code;
-      return $usr;
-    }
-    return null;
   }
   final public function code () { return $this->code; }
   final public function status () { return $this->status; }
