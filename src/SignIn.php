@@ -63,6 +63,7 @@ if( !$gen->checkCSRF($params["form"],$params["CSRF_token"]) ){
 }
 $params['code'] = \str_replace([" ","-","_"], "", $params['code']);
 $user = Admin::authenticate($params["code"], $params["password"]);
+
 if( !$user ){
   echo \json_encode([
     "status" => "3.1",

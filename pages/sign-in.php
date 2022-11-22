@@ -71,22 +71,22 @@ if (!$params) HTTP\Header::badRequest(true);
                 <p>Enter Login Credentials and hit <b>Sign In</b></p>
               </div>
               <div class="grid-12-tablet">
-                <label for="code"><i class="fad fa-hashtag"></i> <i class="fad fa-asterisk fa-sm rq-tag"></i> Account ID</label>
+                <label for="code"><i class="fas fa-hashtag"></i> <i class="fas fa-asterisk fa-sm rq-tag"></i> Account ID</label>
                 <input type="text" name="code" pattern="052([\-|\s]{1,1})?([\d]{4,4})([\-|\s]{1,1})?([\d]{4,4})" id="code" autocomplete="off" required placeholder="052 0000 0000">
               </div>
               <div class="grid-8-tablet">
-                <label for="password"><i class="fad fa-key"></i> <i class="fad fa-asterisk fa-sm rq-tag"></i> Password</label>
+                <label for="password"><i class="fas fa-key"></i> <i class="fas fa-asterisk fa-sm rq-tag"></i> Password</label>
                 <input type="password" name="password" autocomplete="off" id="password" required placeholder="Password">
               </div>
               <div class="grid-4-tablet"> <label class="match-input"></label>
-                <button type="submit" class="theme-button asphalt no-shadow"><i class="fad fa-sign-in-alt"></i> Sign In</button>
+                <button type="submit" class="theme-button asphalt no-shadow"><i class="fas fa-sign-in-alt"></i> Sign In</button>
               </div>
               <div class="grid-12-tablet align-center">
                 <input type="checkbox" name="remember" id="remember-1" class="solid">
                 <label for="remember-1">Keep me logged in for the whole day.</label>
               </div>
               <br class="c-f">
-              <!-- <p class="align-right paddn -pall -p20"><a href="<?php //echo Generic::setGet("/app/user/password-reset", ["rdt"=>$params["rdt"]]); ?>"><i class="fad fa-key"></i> Reset Password</a></p> -->
+              <!-- <p class="align-right paddn -pall -p20"><a href="<?php //echo Generic::setGet("/app/user/password-reset", ["rdt"=>$params["rdt"]]); ?>"><i class="fas fa-key"></i> Reset Password</a></p> -->
             </form>
           </div>
         </div>

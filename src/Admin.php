@@ -59,7 +59,8 @@ class Admin{
   public static function authenticate(string $code, string $password){
     global $database;
     global $access_ranks;
-    $conn = query_conn(self::$_server_name, $database);
+    $server_name = self::$_server_name = get_constant("PRJ_SERVER_NAME");
+    $conn = query_conn($server_name, $database);
     self::_setConn($conn);
     self::$_db_name = get_database(self::$_server_name, "admin");
     $prefix = self::$_prefix_code;
