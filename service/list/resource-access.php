@@ -121,8 +121,8 @@ if ($params && !empty($params['resource'])) {
                         echo "</td>";
                         echo "<td>".\str_replace(",", ", ", $asc->scope)."</td>";
                         echo "<td>";
-                          echo "<button onclick=\"cwos.faderBox.url('/app/admin/post/resource-access', {id:{$asc->id}, resource: '{$asc->resource}', cb: 'requery1'}, {exitBtn:true});\" type=\"button\" class=\"theme-button mini blue no-shadow\"><i class=\"far fa-edit\"></i> Edit</button>";
-                          echo "<button onclick=\"delResAccess({$asc->id});\" type=\"button\" class=\"theme-button mini red no-shadow\" title=\"Delete\"><i class=\"far fa-trash\"></i> Delete</button>";
+                          echo "<button onclick=\"cwos.faderBox.url('/app/admin/post/resource-access', {id:{$asc->id}, resource: '{$asc->resource}', cb: 'requery1'}, {exitBtn:true});\" type=\"button\" class=\"theme-button mini blue no-shadow\"><i class=\"fas fa-edit\"></i> Edit</button>";
+                          echo "<button onclick=\"delResAccess({$asc->id});\" type=\"button\" class=\"theme-button mini red no-shadow\" title=\"Delete\"><i class=\"fas fa-trash\"></i> Delete</button>";
                         echo "</td>";
                       echo "</tr>";
                     }

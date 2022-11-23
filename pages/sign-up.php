@@ -30,11 +30,11 @@ require_once "../.appinit.php";
   </script>
 
 </head>
-<body class="theme-native">
+<body class="theme-<?php echo \IO\get_constant("PRJ_THEME"); ?>">
   <div id="cwos-uiloadr"></div>
   <input type="hidden" data-setup="page" data-name="sign-up" data-group="admin">
 
-  <input type="hidden" data-setup="ui" data-handler="DashUI" data-header="/admin/get/dashui/header?rdt=<?php echo THIS_PAGE; ?>" data-sidebar="/admin/get/dashui/sidebar" data-autoinit="true">
+  <input type="hidden" data-setup="ui" data-handler="DashUI" data-header="/admin/get/dashui/header?rdt=<?php echo THIS_PAGE; ?>" data-sidebar="<?php echo \TymFrontiers\Generic::setGet("/admin/get/dashui/sidebar", ["domain" => $work_domain]); ?>" data-autoinit="true">
   <input type="hidden" data-setup="uiOption" data-max-cart-item="4" data-max-notice-item="4">
   <input type="hidden" data-setup="uiNotification" data-delete="/app/helper/delete/notification" data-path="/app/user/notifications" data-get="/app/helper/get/notification">
   <input type="hidden" data-setup="uiCart" data-delete="/app/helper/delete/cart" data-path="/index/checkout" data-get="/app/helper/get/cart">

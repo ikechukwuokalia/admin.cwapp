@@ -32,14 +32,14 @@ $page_name = "access-types";
   <link rel="stylesheet" href="/assets/css/base.min.css">
   <link rel="stylesheet" href="/app/admin/css/admin.min.css">
 </head>
-<body class="theme-asphalt">
+<body class="theme-<?php echo \IO\get_constant("PRJ_THEME"); ?>">
   <div id="cwos-uiloadr"></div>
   <input type="hidden" data-setup="page" data-pager="#data-pager" data-container="#type-list" data-search="types" data-handler="lsAccessType" data-name="<?php echo $page_name; ?>" data-group="<?php echo $nav_group; ?>">
   <input type="hidden" data-setup="ui" data-handler="DashUI" data-header="/admin/get/dashui/header?rdt=<?php echo THIS_PAGE; ?>" data-sidebar="<?php echo \TymFrontiers\Generic::setGet("/admin/get/dashui/sidebar", ["domain" => $work_domain]); ?>" data-autoinit="true">
   <input type="hidden" data-setup="uiOption" data-max-cart-item="6" data-max-notice-item="6">
   <input type="hidden" data-setup="uiNotification" data-delete="/app/helper/delete/notification" data-path="/app/user/notifications" data-get="/app/helper/get/notification">
   <input type="hidden" data-setup="uiCart" data-delete="/app/helper/delete/cart" data-path="/index/checkout" data-get="/app/helper/get/cart">
-  <input type="hidden" data-setup="dnav" data-group="<?php echo $nav_group; ?>" data-clear-elem="#cwos-content" data-pos="affix" data-container="#cwos-content" data-get="/admin/get/navigation" data-ini-top-pos="0" data-stick-on="">
+  <input type="hidden" data-setup="dnav" data-group="<?php echo $work_domain; ?>" data-clear-elem="#cwos-content" data-pos="affix" data-container="#cwos-content" data-get="/admin/get/navigation" data-ini-top-pos="0" data-stick-on="">
 
   <section id="cwos-content">
     <form id="delete-accstp-form" method="post" action="/app/admin/src/DeleteAccessType.php" data-validate="false" onsubmit="cwos.form.submit(this,checkPost); return false;" >
@@ -115,7 +115,7 @@ $page_name = "access-types";
           <button class="theme-button amber block" onclick="cwos.faderBox.url('/app/admin/list/access-scopes', {}, {exitBtn: true});"> <i class="fas fa-microscope"></i> Manage Scopes</button>
         </div>
       </div>
-      <button id="actvt" type="button" class="cwos-button"> <i class="fad fa-angle-right"></i> <span class="btn-txt">Start</span></button>
+      <button id="actvt" type="button" class="cwos-button"> <i class="fas fa-angle-right"></i> <span class="btn-txt">Start</span></button>
     </div>
     <!-- Required scripts -->
     <script src="/app/cataliwos/plugin.cwapp/js/jquery.min.js"></script>

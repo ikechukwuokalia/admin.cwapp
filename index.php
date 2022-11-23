@@ -30,7 +30,7 @@ $navs = get_navgroup($nav_group);
   <link rel="stylesheet" href="/assets/css/base.min.css">
   <link rel="stylesheet" href="/app/admin/css/admin.min.css">
 </head>
-<body class="theme-asphalt">
+<body class="theme-<?php echo \IO\get_constant("PRJ_THEME"); ?>">
   <div id="cwos-uiloadr"></div>
   <input type="hidden" data-setup="page" data-name="<?php echo $page_name; ?>" data-group="<?php echo $nav_group; ?>">
   <input type="hidden" data-setup="ui" data-handler="DashUI" data-header="/admin/get/dashui/header?rdt=<?php echo THIS_PAGE; ?>" data-sidebar="<?php echo \TymFrontiers\Generic::setGet("/admin/get/dashui/sidebar", ["domain" => $work_domain]); ?>" data-autoinit="true">

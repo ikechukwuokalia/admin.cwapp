@@ -32,7 +32,7 @@ if (!$params || !empty($gen->errors)) {
 $header = [
   "title" => get_constant("PRJ_TITLE"),
   "path" => "/admin",
-  "logo" => "/assets/img/logo-icon.png",
+  "logo" => "/assets/img/bosh-admin-white.png",
   "user" => [
     "avatar"      => $session->isLoggedIn() ? $session->user->avatar : "/app/admin/img/default-avatar.png",
     "title"       => $session->isLoggedIn() ? $session->user->name : "Welcome",

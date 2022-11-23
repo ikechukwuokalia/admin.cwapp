@@ -4,14 +4,14 @@ require_once "../../.appinit.php";
 use \TymFrontiers\HTTP,
     \TymFrontiers\Generic,
     \TymFrontiers\Data,
+    \TymFrontiers\MultiForm,
     \TymFrontiers\InstanceError;
-
+use function \get_database;
 \header("Content-Type: application/json");
 $post = !empty($_POST) ? $_POST : $_GET;
 $gen = new Generic;
 $params = $gen->requestParam([
-  "ws" => ["ws","pattern", "/^289([0-9]{8,11})$/"],
-  "group" => ["group","text",3,26],
+  "group" => ["group","text",3,56],
   "format" => ["format","option", ["json"]]
 ], $post, ["group"]);
 if (!$params || !empty($gen->errors)) {
@@ -23,25 +23,56 @@ if (!$params || !empty($gen->errors)) {
   ]);
   exit;
 }
+
 $params["user"] = $session->name;
 $navigation = [];
-$navs = \file_get_contents(get_constant("PRJ_ROOT") . "/.system/.navigation");
 $nav_group = $params['group'];
-if ($navs && $navs = \json_decode($navs)) {
-  if (!empty($navs->$nav_group)) {
-    foreach ($navs->$nav_group->links as $nav) {
-      if (
-        ((bool)$nav->strict_access && $nav->access_rank == $session->access_rank())
-        || (!(bool)$nav->strict_access && $nav->access_rank <= $session->access_rank())
-      ) {
-        // $nav->path = $path;
-        unset($nav->strict_access);
-        unset($nav->access_rank);
-        $navigation[$nav_group][] = $nav; 
+// check for domain matching group
+if ($domain_paths = (new MultiForm(get_database(get_constant("PRJ_SERVER_NAME"), "admin"), "work_paths", "id"))
+->findBySql("SELECT wkp.title, wkp.path, wkp.onclick, wkp.classname, wkp.icon,
+                    CONCAT(wkd.`path`, wkp.`path`) AS full_path
+          FROM :db:.:tbl: AS wkp
+          LEFT JOIN :db:.work_domains AS wkd ON wkd.`name` = wkp.domain
+          WHERE wkp.`domain` = '{$database->escapeValue($params['group'])}'
+          AND wkp.nav_visible = TRUE 
+          AND wkp.domain IN(
+            SELECT DISTINCT(domain)
+            FROM :db:.path_access
+            WHERE `user` = '{$session->name}'
+            AND access_scope NOT LIKE '%DENY%'
+          )
+          ORDER BY wkp.`sort` ASC")) {
+  // add domain links
+  foreach ($domain_paths as $lnk) {
+    $navigation[$nav_group][] = [
+      "path"=> $lnk->full_path,
+      "title" => $lnk->title,
+      "newtab" => false,
+      "icon" => "<i class=\"{$lnk->icon}\"></i>",
+      "onclick" => $lnk->onclick,
+      "name" => \str_replace(["/", "#"], "", $lnk->path),
+      "classname" => $lnk->classname
+    ];
+  }
+} else {
+  $navs = \file_get_contents(get_constant("PRJ_ROOT") . "/.system/.navigation");
+  if ($navs && $navs = \json_decode($navs)) {
+    if (!empty($navs->$nav_group)) {
+      foreach ($navs->$nav_group->links as $nav) {
+        if (
+          ((bool)$nav->strict_access && $nav->access_rank == $session->access_rank())
+          || (!(bool)$nav->strict_access && $nav->access_rank <= $session->access_rank())
+        ) {
+          // $nav->path = $path;
+          unset($nav->strict_access);
+          unset($nav->access_rank);
+          $navigation[$nav_group][] = $nav; 
+        }
       }
     }
   }
 }
+
 if (empty($navigation[$params['group']])) {
   die( \json_encode([
     "message" => "No result found.",
