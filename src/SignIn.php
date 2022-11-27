@@ -76,81 +76,80 @@ if( !$user ){
   exit;
 }
 // check if otp is needed
-// if (empty($params['otp'])) {
-//   $log_db = get_database(get_constant("PRJ_SERVER_NAME"), "log");
-//   $base_db = get_database(get_constant("PRJ_SERVER_NAME"), "base");
-//   $admin_db = get_database(get_constant("PRJ_SERVER_NAME"), "admin");
+if (empty($params['otp'])) {
+  $log_db = get_database("log", get_constant("PRJ_SERVER_NAME"));
+  $base_db = get_database("base", get_constant("PRJ_SERVER_NAME"));
+  $admin_db = get_database("admin", get_constant("PRJ_SERVER_NAME"));
 
 
-//   $last_login = (new MultiForm($log_db, "user_session", "id", $database))
-//     ->findBySql("SELECT lg.ip, lg.country_code, lg.state_code, lg.city_code, lg.expiry, lg._created,
-//                         adm.`code`, usr.email
-//                 FROM :db:.:tbl: AS lg
-//                 LEFT JOIN `{$admin_db}`.users AS adm ON adm.`code` = '{$params['code']}'
-//                 LEFT JOIN `{$base_db}`.users AS usr ON usr.`code` = adm.`user`
-//                 WHERE lg.`user` = adm.`code`
-//                 AND lg.`type` = 'LOGIN'
-//                 ORDER BY lg._created DESC 
-//                 LIMIT 1");
-//   if (!$last_login) {
-//     $email = false;
-//     if ($email = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "users", "code", $database))->findBySql("SELECT email FROM `{$base_db}`.`users` WHERE `code` = (SELECT `user` FROM :db:.:tbl: WHERE `code` = '{$params['code']}' LIMIT 1) LIMIT 1")) {
-//       // find email
-//       $email = $email[0]->email;
-//     } else {
-//       echo \json_encode([
-//         "status" => "2.1",
-//         "errors" => ["OTP required but no valid email is available."],
-//         "otp_req" => false,
-//         "email" => "",
-//         "message" => "Login failed",
-//         "rdt" => ""
-//       ]);
-//       exit;
-//     }
-//     echo \json_encode([
-//       "status" => "0.3",
-//       "errors" => [],
-//       "otp_req" => true,
-//       "email" => $email,
-//       "message" => "OTP required",
-//       "rdt" => ""
-//     ]);
-//     exit;
-//   } else {
-//     // check if OTP is needed
-//     $last_login = $last_login[0];
-//     $location = new Location();
-//     if (
-//         $last_login->ip !== $location->ip
-//         // more Conditions here
-//       ) {
-//       echo \json_encode([
-//         "status" => "0.3",
-//         "errors" => [],
-//         "otp_req" => true,
-//         "email" => $last_login->email,
-//         "message" => "OTP required",
-//         "rdt" => ""
-//       ]);
-//       exit;
-//     }
-//   }
-// } else {
-//   // validate otp;
-//   $otp = new OTP\ByEmail();
-//   if (!$otp->verify($params['user'], $params['otp'])) {
-//     echo \json_encode([
-//       "status" => "3.1",
-//       "errors" => ["You have entered an invalid/expired OTP"],
-//       "message" => "Request halted.",
-//       "otp_req" => true,
-//       "email" => $params['user'],
-//       "rdt" => ""
-//     ]);
-//     exit;
-//   }
-// }
+  $last_login = (new MultiForm($log_db, "user_session", "id", $database))
+    ->findBySql("SELECT lg.ip, lg.country_code, lg.state_code, lg.city_code, lg.expiry, lg._created,
+                        adm.`code`, adm.email
+                FROM :db:.:tbl: AS lg
+                LEFT JOIN `{$admin_db}`.users AS adm ON adm.`code` = '{$params['code']}'
+                WHERE lg.`user` = adm.`code`
+                AND lg.`type` = 'LOGIN'
+                ORDER BY lg._created DESC 
+                LIMIT 1");
+  if (!$last_login) {
+    $email = false;
+    if ($email = (new MultiForm(get_database("admin", get_constant("PRJ_SERVER_NAME")), "users", "code", $database))->findBySql("SELECT email FROM :db:.:tbl: WHERE `code` = '{$user->code}' LIMIT 1")) {
+      // find email
+      $email = $email[0]->email;
+    } else {
+      echo \json_encode([
+        "status" => "2.1",
+        "errors" => ["OTP required but no valid email is available."],
+        "otp_req" => false,
+        "email" => "",
+        "message" => "Login failed",
+        "rdt" => ""
+      ]);
+      exit;
+    }
+    echo \json_encode([
+      "status" => "0.3",
+      "errors" => [],
+      "otp_req" => true,
+      "email" => $email,
+      "message" => "OTP required",
+      "rdt" => ""
+    ]);
+    exit;
+  } else {
+    // check if OTP is needed
+    $last_login = $last_login[0];
+    $location = new Location();
+    if (
+        $last_login->ip !== $location->ip
+        // more Conditions here
+      ) {
+      echo \json_encode([
+        "status" => "0.3",
+        "errors" => [],
+        "otp_req" => true,
+        "email" => $last_login->email,
+        "message" => "OTP required",
+        "rdt" => ""
+      ]);
+      exit;
+    }
+  }
+} else {
+  // validate otp;
+  $otp = new OTP\ByEmail();
+  if (!$otp->verify($params['user'], $params['otp'])) {
+    echo \json_encode([
+      "status" => "3.1",
+      "errors" => ["You have entered an invalid/expired OTP"],
+      "message" => "Request halted.",
+      "otp_req" => true,
+      "email" => $params['user'],
+      "rdt" => ""
+    ]);
+    exit;
+  }
+}
 $remember = !(bool)$params['remember'] ? \strtotime("+ 1 Hour") : \strtotime("+ 24 Hours");
 $max_access = Admin\access_type($user->access_group);
 if (\is_array($max_access) && \count($max_access) > 1 ) {

@@ -36,7 +36,7 @@ if ( !$gen->checkCSRF($params["form"],$params["CSRF_token"]) ) {
   ]);
   exit;
 }
-$db_name = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin");
+$db_name = get_database("admin", \IO\get_constant("PRJ_SERVER_NAME"));
 // check for duplicate
 include PRJ_ROOT . "/src/Pre-Process.php";
 $path = (new MultiForm($db_name, 'work_paths', 'id', $database))->findById($params['id']);

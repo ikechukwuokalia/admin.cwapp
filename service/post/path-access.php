@@ -26,7 +26,7 @@ if (!empty($params["domain"])) $params["domain"] = $database->escapeValue($param
 if (!empty($params["user"])) $params["user"] = $database->escapeValue(\str_replace(["-", " ", ".", "_"],"",$params["user"]));
 $path_name = empty($params['path']) ? "" : " AND `path` = '{$database->escapeValue($params['path'])}' ";
 if( $params ):
-  if( $access = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"),'path_access','id'))
+  if( $access = (new MultiForm(get_database("admin", \IO\get_constant("PRJ_SERVER_NAME")),'path_access','id'))
     ->findBySql("SELECT * FROM :db:.:tbl: WHERE `user` = '{$params['user']}' AND `domain` = '{$params['domain']}' AND `type` = 'PATH' {$path_name}") ){
     foreach ($access as $acs) {
       $access_scope[$acs->path] = (!empty($acs->access_scope) ? \explode(",", $acs->access_scope) : []);
@@ -35,8 +35,8 @@ if( $params ):
 endif;
 // get domain paths
 $paths = [];
-$data_db = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data");
-$fpath = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "work_paths", "1"))
+$data_db = get_database("data", \IO\get_constant("PRJ_SERVER_NAME"));
+$fpath = (new MultiForm(get_database("admin", \IO\get_constant("PRJ_SERVER_NAME")), "work_paths", "1"))
   ->findBySql("SELECT wpt.`path`, wpt.access_scope, wpt.resource_type, wpt.title, wpt.description,
                       tg.title AS resource_type_title
               FROM :db:.:tbl: AS wpt
@@ -57,7 +57,7 @@ if ($fpath) {
   }
 } else {
   $errors[] = "No [path] was found for the [domain] '{$params['domain']}'";
-} if (!$user = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "users", "code"))->findById($params['user'])) {
+} if (!$user = (new MultiForm(get_database("admin", \IO\get_constant("PRJ_SERVER_NAME")), "users", "code"))->findById($params['user'])) {
   $errors[] = "No record was found for [user] '{$params['user']}'";
 } else if ($user->status !== "ACTIVE") {
   $errors[] = "[user]'s account is not active.";

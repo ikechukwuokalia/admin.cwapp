@@ -3,10 +3,10 @@ namespace IO;
 require_once ".appinit.php";
 \require_login(true);
 $work_domain = "project-admin";
-$nav_group = "index";
-$page_name = "index";
+$nav_group = "admin";
+$page_name = "admin";
 // \check_access("/{$nav_group}", $work_domain);
-$navs = get_navgroup($nav_group);
+$navs = get_domainnav($work_domain);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,16 +45,16 @@ $navs = get_navgroup($nav_group);
           <div class="sec-div paddn -pall -p30">
             <ul id="thumb-list">
               <?php if (!empty($navs)) { foreach ($navs as $nav):
-                if (!\in_array($nav->path, ["/{$nav_group}", "/{$nav_group}/", "/"])) {
+                if (!\in_array($nav['path'], ["/{$nav_group}", "/{$nav_group}/", "/"])) {
                   echo "<li";
-                    if (!empty($nav->onclick)) {
-                      echo " onclick=\"{$nav->onclick}();\"";
+                    if (!empty($nav['onclick'])) {
+                      echo " onclick=\"{$nav['onclick']}();\"";
                     } else {
-                      echo " onclick=\"redirectTo('{$nav->path}', ", ((bool)$nav->newtab ? 'true' : 'false'),")\"";
+                      echo " onclick=\"redirectTo('{$nav['path']}', ", ((bool)$nav['newtab'] ? 'true' : 'false'),")\"";
                     }
                   echo ">";
-                    echo "<span class='ls-icon'>{$nav->icon}</span> <br>";
-                  echo "{$nav->title}</li>";
+                    echo "<span class='ls-icon'>{$nav['icon']}</span> <br>";
+                  echo "{$nav['title']}</li>";
                   echo PHP_EOL;
                 }
               endforeach; } ?>

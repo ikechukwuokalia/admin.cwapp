@@ -44,7 +44,7 @@ if ( !$gen->checkCSRF($params["form"],$params["CSRF_token"]) ) {
   exit;
 }
 include PRJ_ROOT . "/src/Pre-Process.php";
-$db_name = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin");
+$db_name = get_database("admin", \IO\get_constant("PRJ_SERVER_NAME"));
 
 $is_new = $params['task'] == 'CREATE';
 if ($is_new && (new MultiForm($db_name, 'work_domains', 'name', $database))->findBySql("SELECT * FROM :db:.:tbl: WHERE `name`='{$params['name']}' OR `acronym`='{$params['acronym']}' LIMIT 1")) {

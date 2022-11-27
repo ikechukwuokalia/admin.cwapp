@@ -21,7 +21,7 @@ if (!$params || !empty($gen->errors)) {
   }
 }
 if ($params && !empty($params['resource'])) {
-  $data_db = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data");
+  $data_db = get_database("data", \IO\get_constant("PRJ_SERVER_NAME"));
   $count = 0;
   $data = new MultiForm($data_db, 'resource_access', 'id', $database);
   $data->current_page = $page = 1;

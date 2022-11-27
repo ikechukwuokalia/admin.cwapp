@@ -21,7 +21,7 @@ if (!$params || !empty($gen->errors)) {
   }
 }
 if( $params ):
-  if( !empty($params['id']) && !$kwd = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"),'reserved_keywords','id'))->findById($params['id']) ){
+  if( !empty($params['id']) && !$kwd = (new MultiForm(get_database("data", \IO\get_constant("PRJ_SERVER_NAME")),'reserved_keywords','id'))->findById($params['id']) ){
     $errors[] = "No record found for given [id]: {$params['id']}";
   }
 endif;

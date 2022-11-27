@@ -21,7 +21,7 @@ if (!$params || !empty($gen->errors)) {
   }
 }
 if( $params ):
-  if( !empty($params['name']) && !$scope = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"),'access_scopes','name'))->findById($params['name']) ){
+  if( !empty($params['name']) && !$scope = (new MultiForm(get_database("data", \IO\get_constant("PRJ_SERVER_NAME")),'access_scopes','name'))->findById($params['name']) ){
     $errors[] = "No record found for given [name]: {$params['name']}";
   }
 endif;

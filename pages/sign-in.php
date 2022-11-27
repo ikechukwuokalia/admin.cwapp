@@ -5,7 +5,7 @@ use \TymFrontiers\HTTP,
     \TymFrontiers\Data,
     \TymFrontiers\Generic;
 
-if ($session->isLoggedIn()) HTTP\Header::redirect(WHOST . "/index");
+if ($session->isLoggedIn()) HTTP\Header::redirect(WHOST . "/admin");
 $gen = new Generic;
 $data = new Data;
 $params = $gen->requestParam([
@@ -40,18 +40,18 @@ if (!$params) HTTP\Header::badRequest(true);
   <body class="theme-<?php echo \IO\get_constant("PRJ_THEME"); ?>">
     <input type="hidden" data-setup="page" data-name="sign-in" data-group="admin">
     
-    <input type="hidden" data-setup="ui" data-handler="DashUI" data-header="/admin/get/dashui/header?rdt=<?php echo THIS_PAGE; ?>" data-sidebar="<?php echo \TymFrontiers\Generic::setGet("/admin/get/dashui/sidebar", ["domain" => $work_domain]); ?>" data-autoinit="true">
-    <input type="hidden" data-setup="uiOption" data-max-cart-item="4" data-max-notice-item="4">
+    <input type="hidden" data-setup="ui" data-handler="DashUI" data-header="/admin/get/dashui/header?rdt=<?php echo THIS_PAGE; ?>" data-sidebar="/admin/get/dashui/sidebar" data-autoinit="true">
+    <input type="hidden" data-setup="uiOption" data-max-cart-item="4" data-max-notice-item="4" data-hide="true">
     <input type="hidden" data-setup="uiNotification" data-delete="/app/helper/delete/notification" data-path="/app/user/notifications" data-get="/app/helper/get/notification">
     <input type="hidden" data-setup="uiCart" data-delete="/app/helper/delete/cart" data-path="/index/checkout" data-get="/app/helper/get/cart">
     
-    <input type="hidden" data-setup="dnav" data-group="admin" data-clear-elem="#cwos-content" data-pos="affix" data-container="#cwos-content" data-get="/admin/get/navigation" data-ini-top-pos="0" data-stick-on="">
+    <input type="hidden" data-setup="dnav" data-group="user" data-clear-elem="#cwos-content" data-pos="affix" data-container="#cwos-content" data-get="/admin/get/navigation" data-ini-top-pos="0" data-stick-on="">
     
     <section id="cwos-content">
       <div class="view-space">
         <div class="padding -p30">&nbsp;</div>
-        <div class="grid-10-tablet grid-8-laptop grid-6-desktop center-tablet">
-          <div class="paddn -pall -p30 bg-white drop-shadow theme-color asphalt">
+        <div class="grid-6-tablet grid-5-laptop grid-4-desktop center-tablet">
+          <div class="paddn -pall -p30 bg-white drop-shadow theme-color <?php echo \IO\get_constant("PRJ_THEME"); ?>">
             <form 
             autocomplete="off" 
             id="admin-sign-in" 
@@ -72,18 +72,18 @@ if (!$params) HTTP\Header::badRequest(true);
               </div>
               <div class="grid-12-tablet">
                 <label for="code"><i class="fas fa-hashtag"></i> <i class="fas fa-asterisk fa-sm rq-tag"></i> Account ID</label>
-                <input type="text" name="code" pattern="052([\-|\s]{1,1})?([\d]{4,4})([\-|\s]{1,1})?([\d]{4,4})" id="code" autocomplete="off" required placeholder="052 0000 0000">
+                <input type="text" name="code"id="code" autocomplete="off" required placeholder="052 0000 0000">
               </div>
-              <div class="grid-8-tablet">
+              <div class="grid-12-tablet">
                 <label for="password"><i class="fas fa-key"></i> <i class="fas fa-asterisk fa-sm rq-tag"></i> Password</label>
                 <input type="password" name="password" autocomplete="off" id="password" required placeholder="Password">
-              </div>
-              <div class="grid-4-tablet"> <label class="match-input"></label>
-                <button type="submit" class="theme-button asphalt no-shadow"><i class="fas fa-sign-in-alt"></i> Sign In</button>
               </div>
               <div class="grid-12-tablet align-center">
                 <input type="checkbox" name="remember" id="remember-1" class="solid">
                 <label for="remember-1">Keep me logged in for the whole day.</label>
+              </div>
+              <div class="grid-12-tablet"> <label class="match-input"></label>
+                <button type="submit" class="theme-button <?php echo \IO\get_constant("PRJ_THEME"); ?> no-shadow"><i class="fas fa-sign-in-alt"></i> Sign In</button>
               </div>
               <br class="c-f">
               <!-- <p class="align-right paddn -pall -p20"><a href="<?php //echo Generic::setGet("/app/user/password-reset", ["rdt"=>$params["rdt"]]); ?>"><i class="fas fa-key"></i> Reset Password</a></p> -->
@@ -99,7 +99,7 @@ if (!$params) HTTP\Header::badRequest(true);
   <script src="/app/cataliwos/plugin.cwapp/js/class-object.min.js"></script>
   <script src="/app/cataliwos/dashui.cwapp/js/dashui.min.js"></script>
   <script src="/app/cataliwos/plugin.cwapp/js/theme.min.js"></script>
-  <script src="/app/ikechukwuokalia/helper.cwapp/js/helper.min.js"></script>
+  <script src="/app/ikechukwuokalia/helper.cwapp/js/helper.js"></script>
   <script src="/assets/js/base.min.js"></script>
   <script src="/app/admin/js/admin.min.js"></script>
     <script type="text/javascript">

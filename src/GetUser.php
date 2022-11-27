@@ -40,31 +40,28 @@ if ( !$gen->checkCSRF($params["form"],$params["CSRF_token"]) ) {
   exit;
 }
 $server_name = "BASE";
-$base_db = get_database($server_name, "base");
-$admin_db = get_database($server_name, "admin");
-$file_db = get_database($server_name, "file");
-$data_db = get_database($server_name, "data");
+$admin_db = get_database("admin", $server_name);
+$file_db = get_database("file", $server_name);
+$data_db = get_database("data", $server_name);
 $count = 0;
 $data = new MultiForm($admin_db, 'users', 'code', $database);
 $data->current_page = $page = (int)$params['page'] > 0 ? (int)$params['page'] : 1;
 $file_server = get_constant("PRJ_FILE_SERVER");
-$uq = "SELECT adm.`code`, adm.`user`, adm.work_group, adm.status,
-              usr.name, usr.surname, usr.status AS user_status, usr.country_code,
-              usr.email, usr.phone,
+$uq = "SELECT adm.`code`, adm.work_group, adm.status,
+              adm.name, adm.surname, adm.`status`, adm.country_code,
+              adm.email, adm.phone, adm.dob, adm.sex,
               c.`name` AS country,
               (
                 SELECT CONCAT('{$file_server}/',f._name)
               ) AS avatar
       FROM :db:.:tbl: AS adm 
-      LEFT JOIN `{$base_db}`.`users` AS usr ON usr.`code` = adm.`user`
-      LEFT JOIN {$data_db}.countries AS c ON c.`code` = usr.country_code
-      LEFT JOIN `{$file_db}`.`file_default` AS fd ON fd.`user` = usr.`code` AND fd.set_key = 'USER.AVATAR'
+      LEFT JOIN {$data_db}.countries AS c ON c.`code` = adm.country_code
+      LEFT JOIN `{$file_db}`.`file_default` AS fd ON fd.`user` = adm.`code` AND fd.set_key = 'USER.AVATAR'
       LEFT JOIN `{$file_db}`.`file_meta` AS f ON f.id = fd.file_id ";
 $cnd = " WHERE 1=1 ";
 if (!empty($params['code'])) {
   $cnd .= " AND (
     adm.`code` = '{$params['code']}'
-    OR adm.`user` = '{$params['code']}'
   ) ";
 } else {
   if (!empty($params['status'])) {
@@ -74,13 +71,10 @@ if (!empty($params['code'])) {
     $params['search'] = $db->escapeValue(\strtolower($params['search']));
     $cnd .= " AND (
       adm.`code` = '{$params['search']}'
-    ) OR adm.`user` IN (
-      SELECT `code`
-      FROM `{$base_db}`.`users`
-      WHERE LOWER(`name`) LIKE '%{$params['search']}%'
-      OR LOWER(surname) LIKE '%{$params['search']}%'
-      OR email = '{$params['search']}'
-      OR phone = '{$params['search']}'
+      OR adm.`email` = '{$params['search']}'
+      OR adm.phone LIKE '%{$params['search']}%'
+      OR adm.name LIKE '%{$params['search']}%'
+      OR adm.surname LIKE '%{$params['search']}%'
     ) ";
   }
 }
@@ -127,10 +121,7 @@ foreach ($found as $user) {
     "code" => $user->code,
     "status" => $user->status,
     "workGroup" => $user->work_group,
-    "user_status" => $user->user_status,
     "codeSplit" => code_split($user->code, " "),
-    "user" => $user->user,
-    "userSplit" => code_split($user->user, " "),
     "name" => $user->name,
     "surname" => $user->surname,
     "email" => $user->email,
@@ -140,7 +131,7 @@ foreach ($found as $user) {
     "phoneLocal" => $data_obj->phoneToLocal($user->phone),
     "country" => $user->country,
     "countryCode" => $user->country_code,
-    "avatar" => (!empty($user->avatar) ? $user->avatar : "/app/cataliws/php-userprofile/img/default-avatar.png"),
+    "avatar" => (!empty($user->avatar) ? $user->avatar : WHOST . "/app/ikechukwuokalia/admin.cwapp/img/default-avatar.png"),
   ];
 }
 echo \json_encode($result);

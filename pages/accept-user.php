@@ -65,7 +65,7 @@ endif;
               <select name="work_group" id="work_group" required>
                 <option value="">Choose work group</option>
                 <optgroup label="Work Groups">
-                  <?php if ($work_groups = (new MultiForm(get_database("BASE", "base"), "access_types", "name"))->findBySql("SELECT * FROM :db:.:tbl: WHERE `rank` <= {$session->access_rank()} AND `rank` > 0 ORDER BY `rank` ASC")) {
+                  <?php $acs_mx = $session->access_group() == "DEVELOPER" ? "" : " AND `rank` <= {$session->access_rank()} "; if ($work_groups = (new MultiForm(get_database("data","BASE"), "access_types", "name"))->findBySql("SELECT * FROM :db:.:tbl: WHERE `rank` > 0 {$acs_mx} ORDER BY `rank` ASC")) {
                     foreach ($work_groups as $wg) {
                       echo "<option value=\"{$wg->name}\" title=\"{$wg->description}\">{$wg->title}</option>"; 
                     }

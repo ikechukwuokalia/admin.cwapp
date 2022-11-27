@@ -49,7 +49,7 @@ $sidebar["sidenav"] = [];
 
 // get spotlights from work domains
 if (!empty($params['domain'])) {
-  if ($spotlight = (new MultiForm(get_database(get_constant("PRJ_SERVER_NAME"), "admin"), "work_domains", "name"))
+  if ($spotlight = (new MultiForm(get_database("admin", get_constant("PRJ_SERVER_NAME")), "work_domains", "name"))
     ->findBySql("SELECT `path`, title, `description` AS subtitle,
                         CONCAT(`path`, cover_art) AS cover,
                         CONCAT(`path`, avatar) AS avatar
@@ -66,7 +66,7 @@ if (!empty($params['domain'])) {
     $sidebar["spotlight"]['cover'] = $spotlight->cover;
     $sidebar["spotlight"]['avatar'] = $spotlight->avatar;
     // get links
-    if ($lnks = (new MultiForm(get_database(get_constant("PRJ_SERVER_NAME"), "admin"), "work_domains", "name"))
+    if ($lnks = (new MultiForm(get_database("admin", get_constant("PRJ_SERVER_NAME")), "work_domains", "name"))
       ->findBySql("SELECT title, `path`
                   FROM :db:.:tbl:
                   WHERE `name` <> '{$database->escapeValue($params['domain'])}'
@@ -85,7 +85,7 @@ if (!empty($params['domain'])) {
     }
   }
   // get domain paths
-  if ($domain_paths = (new MultiForm(get_database(get_constant("PRJ_SERVER_NAME"), "admin"), "work_paths", "id"))
+  if ($domain_paths = (new MultiForm(get_database("admin", get_constant("PRJ_SERVER_NAME")), "work_paths", "id"))
       ->findBySql("SELECT wkp.title, wkp.path, wkp.onclick, wkp.classname, wkp.icon,
                           CONCAT(wkd.`path`, wkp.`path`) AS full_path,
                           wkd.title AS domain_title

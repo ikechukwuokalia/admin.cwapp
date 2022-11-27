@@ -9,7 +9,7 @@ require_once "../.appinit.php";
 $work_domain = "project-admin";
 $nav_group = "index";
 $page_name = "work-paths";
-$adm_db = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin");
+$adm_db = get_database("admin", \IO\get_constant("PRJ_SERVER_NAME"));
 \check_access("READ", "/work-paths", $work_domain, "", true);
 // get default API app
 ?>
@@ -69,7 +69,7 @@ $adm_db = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin");
               <select name="domain" id="query-domain">
                 <option value="">* All work domain</option>
                 <optgroup label="Work domains">
-                  <?php if ($domains = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "work_domains", "name"))->findBySql("SELECT * FROM :db:.:tbl: WHERE `name` IN ( SELECT `domain` FROM :db:.work_paths) ORDER BY `name` ASC ")) {
+                  <?php if ($domains = (new MultiForm(get_database("admin", \IO\get_constant("PRJ_SERVER_NAME")), "work_domains", "name"))->findBySql("SELECT * FROM :db:.:tbl: WHERE `name` IN ( SELECT `domain` FROM :db:.work_paths) ORDER BY `name` ASC ")) {
                     foreach ($domains as $dmn) {
                       echo "<option value=\"{$dmn->name}\"";
                       echo " title=\"{$dmn->description}\">{$dmn->name}</option>";
@@ -83,7 +83,7 @@ $adm_db = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin");
               <select name="task_group" id="query-task-group">
                 <option value="">* All groups</option>
                 <optgroup label="Task groups">
-                  <?php if ($tgs = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"), "task_groups", "name"))->findBySql("SELECT * FROM :db:.:tbl: WHERE `name` IN ( SELECT `task_group` FROM `{$adm_db}`.work_paths) ORDER BY `name` ASC ")) {
+                  <?php if ($tgs = (new MultiForm(get_database("data", \IO\get_constant("PRJ_SERVER_NAME")), "task_groups", "name"))->findBySql("SELECT * FROM :db:.:tbl: WHERE `name` IN ( SELECT `task_group` FROM `{$adm_db}`.work_paths) ORDER BY `name` ASC ")) {
                     foreach ($tgs as $dmn) {
                       echo "<option value=\"{$dmn->name}\"";
                       echo " title=\"{$dmn->description}\">{$dmn->title}</option>";
@@ -94,7 +94,7 @@ $adm_db = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin");
             </div> 
             <div class="grid-12-tablet">
               <label>Access scope \ </label> <br>
-              <?php if ($scopes = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"), "access_scopes", "name"))->findBySql("SELECT * FROM :db:.:tbl: ORDER BY `rank` ASC")) {
+              <?php if ($scopes = (new MultiForm(get_database("data", \IO\get_constant("PRJ_SERVER_NAME")), "access_scopes", "name"))->findBySql("SELECT * FROM :db:.:tbl: ORDER BY `rank` ASC")) {
                 foreach ($scopes as $scope) {
                   echo "<span>";
                     echo "<input type=\"checkbox\" name=\"access_scope\" id=\"filter-{$scope->name}\" value=\"{$scope->name}\">";

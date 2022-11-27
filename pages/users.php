@@ -43,10 +43,8 @@ $page_name = "users";
   <input type="hidden" data-setup="dnav" data-group="<?php echo $work_domain; ?>" data-clear-elem="#cwos-content" data-pos="affix" data-container="#cwos-content" data-get="/admin/get/navigation" data-ini-top-pos="0" data-stick-on="">
 
   <section id="cwos-content">
-    <form id="post-form" method="post" action="/app/developer/src/PostUser.php" data-validate="false" onsubmit="cwos.form.submit(this,checkPost); return false;" >
-      <input type="hidden" name="form" value="apiuser-update-form">
-      <input type="hidden" name="CSRF_token" value="<?php echo $session->createCSRFtoken("apiuser-update-form");?>">
-      <input type="hidden" name="name" value="">
+    <form id="patch-usr-form" method="post" action="/app/admin/src/PatchUser.php" data-validate="false" onsubmit="cwos.form.submit(this,checkPost); return false;" >
+      <input type="hidden" name="code" value="">
       <input type="hidden" name="status" value="">
     </form>
     <div class="view-space-max">

@@ -28,7 +28,7 @@ $params["user"] = $session->name;
 $navigation = [];
 $nav_group = $params['group'];
 // check for domain matching group
-if ($domain_paths = (new MultiForm(get_database(get_constant("PRJ_SERVER_NAME"), "admin"), "work_paths", "id"))
+if ($domain_paths = (new MultiForm(get_database("admin", get_constant("PRJ_SERVER_NAME")), "work_paths", "id"))
 ->findBySql("SELECT wkp.title, wkp.path, wkp.onclick, wkp.classname, wkp.icon,
                     CONCAT(wkd.`path`, wkp.`path`) AS full_path
           FROM :db:.:tbl: AS wkp

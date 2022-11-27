@@ -66,7 +66,7 @@ if (!$conn instanceof MySQLDatabase) {
   exit;
 }
 
-$db_name = get_database($server_name, "base");
+$db_name = get_database("base", $server_name);
 include PRJ_ROOT . "/src/Pre-Process.php";
 $setting = (new MultiForm($db_name, 'settings', 'id', $conn))->findById($params['id']);
 

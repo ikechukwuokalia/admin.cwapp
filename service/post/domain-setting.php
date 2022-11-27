@@ -55,7 +55,7 @@ if( $params ):
       }
     }
 
-    $db_name = get_database($server_name, "base");
+    $db_name = get_database("base", $server_name);
     if (empty($errors)) {
       if (!$setting = (new MultiForm($db_name, "settings", "id", $conn))->findById($params['id'])) {
         $errors[] = "No record was found for setting [id] {$params['id']}.";
@@ -125,7 +125,7 @@ $enc_key = $setting ? encKey(domain_server($params['domain'])) : "";
               <select name="domain" required>
                 <option value="">* Setting domain</option>
                 <optgroup label="Domains">
-                  <?php if ($domains = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "work_domains", "name"))->findAll()) {
+                  <?php if ($domains = (new MultiForm(get_database("admin", \IO\get_constant("PRJ_SERVER_NAME")), "work_domains", "name"))->findAll()) {
                     foreach ($domains as $dmn) {
                       echo " <option value=\"{$dmn->name}\" title=\"{$dmn->description}\" ";
                         echo $setting && $params["domain"] == $dmn->name ? ' selected' : '';

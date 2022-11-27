@@ -13,7 +13,7 @@ use function IO\get_constant;
 // Profile functions
 function log_session (string $type = "LOGIN") {
   global $session, $database;
-  if (!$db_name = get_database(get_constant("PRJ_SERVER_NAME"), "log")) throw new \Exception("Database not found for domain settings.", 1);
+  if (!$db_name = get_database("log", get_constant("PRJ_SERVER_NAME"))) throw new \Exception("Database not found for domain settings.", 1);
   $conn = query_conn(get_constant("PRJ_SERVER_NAME"), $database);
 
   if ( $session instanceof Session &&  $session->isLoggedIn()) {

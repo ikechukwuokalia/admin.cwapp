@@ -6,7 +6,7 @@ function LoginWithOtp (code) {
     $("form#admin-sign-in").submit();
   }, 500);
 }
-const signIn = (resp) => {
+function signIn (resp) {
   if( resp && ( resp.errors.length <= 0 || resp.status == "0.0") && !resp.otp_req ){
     $('#admin-sign-in').trigger("reset");
     if ( resp.rdt.length > 0 ) {
@@ -19,7 +19,7 @@ const signIn = (resp) => {
       $("form#admin-sign-in input[name=user]").val(resp.email);
       setTimeout(function(){
         removeAlert();
-        cwos.faderBox.url('/app/helper/otp/send-email', {
+        cwos.faderBox.url('/app/helper/get/otp/send-email', {
           email : resp.email,
           cb : "LoginWithOtp",
           MUST_EXIST : true,
@@ -27,6 +27,8 @@ const signIn = (resp) => {
           code_length : 8
         }, { method : "POST", exitBtn : false });
       }, 820);
+    } else {
+      console.log("nothing is here");
     }
   }
 }
@@ -36,10 +38,10 @@ const chkSignUp = (frm) => {
     cwos.form.submit(frm, signUp);
   } else {
     // get otp
-    cwos.faderBox.url('/app/helper/otp/send-email', {
-      email : usreml,
+    cwos.faderBox.url('/app/helper/get/otp/send-email', {
+      email : $("#email").val(),
       cb : "RegWithOtp",
-      MUST_EXIST : true,
+      MUST_NOT_EXIST : true,
       code_variant : "numbers",
       code_length : 8
     }, { method : "POST", exitBtn : false });
@@ -67,7 +69,14 @@ const signUp = (resp) => {
     }
   }
 }
-
+const patchUsr = (code, status) => {
+  let frm = $("#patch-usr-form");
+  if (code && status && confirm("Do you want to change the status of this user?")) {
+    frm.find("input[name=code]").val(code);
+    frm.find("input[name=status]").val(status);
+    frm.submit();
+  }
+}
 function listUser (users) {
   let conf = pConf(0);
   let html = "";
@@ -91,8 +100,8 @@ function listUser (users) {
       html += `</td>`;
       html += `<td>${usr.workGroup}</td>`;
       html += `<td>`;
-          html += `<a href="#" onclick="cwos.faderBox.url('/app/admin/view/user-profile',{code:'${usr.user}'})" title="${usr.name} ${usr.surname}">`;
-            html += `${usr.name} (${usr.userSplit})`;
+          html += `<a href="#" onclick="javascript:void(0)">`;
+            html += `${usr.name} ${usr.surname}`;
           html += `</a>`; 
       html += `</td>`;
       html += `<td> <a href="mailto:${usr.email}">${usr.emailMask}<a/></td>`;
@@ -102,9 +111,9 @@ function listUser (users) {
           if (usr.status == "ACTIVE") {
             btns.push(`<button onclick="patchUsr('${usr.code}', 'BANNED');" type="button" class="theme-button mini red no-shadow" title="ban"><i class="fas fa-ban"></i> Ban user</button>`);
 
-            btns.push(`<button onclick="patchUsr('${usr.code}', 'SUSPEND');" type="button" class="theme-button mini amber no-shadow" title="Suspend"><i class="fas fa-traffic-light-stop"></i> Suspend</button>`);
+            btns.push(`<button onclick="patchUsr('${usr.code}', 'SUSPENDED');" type="button" class="theme-button mini amber no-shadow" title="Suspend"><i class="fas fa-traffic-light-stop"></i> Suspend</button>`);
           } if (usr.status == "REQUESTING") {
-            btns.push(`<button onclick="cwos.faderBox.url('/index/accept-user', {code:'${usr.code}'}, {exitBtn: true});" type="button" class="theme-button mini green no-shadow" title="Accept user"><i class="fas fa-check-circle"></i> Accept</button>`);
+            btns.push(`<button onclick="cwos.faderBox.url('/admin/accept-user', {code:'${usr.code}'}, {exitBtn: true});" type="button" class="theme-button mini green no-shadow" title="Accept user"><i class="fas fa-check-circle"></i> Accept</button>`);
 
             btns.push(`<button onclick="patchUsr('${usr.code}', 'REJECTED');" type="button" class="theme-button mini red no-shadow" title="Reject user"><i class="fas fa-times"></i> Reject</button>`);
           }

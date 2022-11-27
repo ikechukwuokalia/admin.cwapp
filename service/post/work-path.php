@@ -22,7 +22,7 @@ if (!$params || !empty($gen->errors)) {
   }
 }
 if( $params ):
-  if( !empty($params['id']) && !$path = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"),'work_paths','id'))->findById($params['id']) ){
+  if( !empty($params['id']) && !$path = (new MultiForm(get_database("admin", \IO\get_constant("PRJ_SERVER_NAME")),'work_paths','id'))->findById($params['id']) ){
     $errors[] = "No record found for given [id]: {$params['id']}";
   }
   if ($path) $path->access_scope = (!empty($path->access_scope) ? \explode(",", $path->access_scope) : []);
@@ -68,7 +68,7 @@ endif;
               <select name="domain" id="domain" required>
                 <option value="">* Choose a domain</option>
                 <optgroup label="Work domains">
-                  <?php if ($domains = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "admin"), "work_domains", "name"))->findAll()) {
+                  <?php if ($domains = (new MultiForm(get_database("admin", \IO\get_constant("PRJ_SERVER_NAME")), "work_domains", "name"))->findAll()) {
                     foreach ($domains as $dmn) {
                       echo "<option value=\"{$dmn->name}\"";
                         echo $path && $path->domain == $dmn->name ? " selected" : (!empty($params['domain']) && $params['domain'] == $dmn->name ? " selected" : "");
@@ -87,7 +87,7 @@ endif;
               <select name="resource_type" id="task-group" required>
                 <option value="">* Choose a group</option>
                 <optgroup label="Groups">
-                  <?php if ($groups = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"), "resource_types", "name"))->findAll()) {
+                  <?php if ($groups = (new MultiForm(get_database("data", \IO\get_constant("PRJ_SERVER_NAME")), "resource_types", "name"))->findAll()) {
                     foreach ($groups as $grp) {
                       echo "<option value=\"{$grp->name}\"";
                         echo $path && $path->resource_type == $grp->name ? " selected" : "";
@@ -125,7 +125,7 @@ endif;
             </div>
             <div class="grid-12-tablet">
               <h4>Access scope</h4>
-              <?php if ($scopes = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"), "access_scopes", "name"))->findBySql("SELECT * FROM :db:.:tbl: ORDER BY `rank` ASC")) {
+              <?php if ($scopes = (new MultiForm(get_database("data", \IO\get_constant("PRJ_SERVER_NAME")), "access_scopes", "name"))->findBySql("SELECT * FROM :db:.:tbl: ORDER BY `rank` ASC")) {
                 foreach ($scopes as $scope) {
                   echo "<span>";
                     echo "<input type=\"checkbox\" name=\"access_scope\" id=\"scope-{$scope->name}\" value=\"{$scope->name}\"";

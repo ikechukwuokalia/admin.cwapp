@@ -44,7 +44,7 @@ if ( !$gen->checkCSRF($params["form"],$params["CSRF_token"]) ) {
   ]);
   exit;
 }
-$db_name = get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data");
+$db_name = get_database("data", \IO\get_constant("PRJ_SERVER_NAME"));
 // check for duplicate
 $is_new = empty($params['id']);
 if ($is_new && (new MultiForm($db_name, 'setting_options', 'id', $database))->findBySql("SELECT id FROM :db:.:tbl: WHERE `name`='{$database->escapeValue($params['name'])}' LIMIT 1")){

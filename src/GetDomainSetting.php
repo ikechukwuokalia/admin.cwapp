@@ -70,7 +70,7 @@ if (!$conn instanceof MySQLDatabase) {
   ]);
   exit;
 }
-$db_name = get_database($server_name, "base");
+$db_name = get_database("base", $server_name);
 $conn->changeDB($db_name);
 $count = 0;
 $data = new MultiForm($db_name, 'settings', 'id', $conn);
@@ -129,7 +129,7 @@ foreach ($found as $f) {
   $enc_names[] = $f->skey;
 } if (!empty($enc_names)) {
   $qs = "SELECT `name`, `encrypt`, `title` FROM :db:.:tbl: WHERE `name` IN ('" . \implode("','", $enc_names) . "')";
-  if ($qf = (new MultiForm(get_database(\IO\get_constant("PRJ_SERVER_NAME"), "data"), "setting_options", "id", $database))->findBySql($qs)) {
+  if ($qf = (new MultiForm(get_database("data", \IO\get_constant("PRJ_SERVER_NAME")), "setting_options", "id", $database))->findBySql($qs)) {
     foreach ($qf as $f) {
       $enc_list[$f->name] = [
         "encrypt" => (bool)$f->encrypt,

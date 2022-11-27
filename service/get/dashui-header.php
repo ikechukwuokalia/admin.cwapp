@@ -46,7 +46,7 @@ if ($session->isLoggedIn()) {
     [
       "title" => "<i class='fas fa-user-cog'></i> Change Password",
       "path" => "#",
-      "onclick" => "cwos.faderBox.url('/app/admin/post/popup/change-password', {}, {exitBtn: true});",
+      "onclick" => "cwos.faderBox.url('/app/admin/popup/change-password', {}, {exitBtn: true});",
       "newtab" => false
     ],
     [
