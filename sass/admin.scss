@@ -2,3 +2,25 @@
 @use "sass:map";
 @import "colors";
 @import "fn";
+
+input#password, input#sign-in-password, input#sign-up-password, input#login-password, input#signin-password, input#signup-password, input#old-password, input#new-password, input#password-repeat {
+  padding-right: 55px;
+}
+.pwd-inpt-tggl{
+  position: absolute !important;
+  right: 5% !important;
+  top: 40% !important;
+  width: 35px !important;
+  height: 35px !important;
+  padding: 3.5px !important;
+  background-color: rgba(theme-color('red', bg), 0.2) !important;
+  border: none !important;
+  color: dimgray !important;
+  &::before{
+    font-family: "Font Awesome 5 Free";
+    content: "\f06e";
+    font-weight: 900;
+  }
+  &:hover{ cursor: pointer; }
+  &.visible::before{ content: "\f070";}
+}

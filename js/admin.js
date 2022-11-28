@@ -479,5 +479,26 @@ const postPtAcs = (frm, callback) => {
 // const page = (typeof cwos !== undefined && typeof cwos.config !== undefined && typeof cwos.config.page !== undefined) ? cwos.config.page : {}
 // page .sub = [];
 (function(){
-  
+  let inpt = $(document).find("input#password, input#sign-in-password, input#sign-up-password, input#login-password, input#signin-password, input#signup-password, input#old-password, input#new-password, input#password-repeat").eq(0);
+  if (inpt.length) {
+    let wrp = inpt.parent();
+    if (wrp.length) {
+      wrp.css("position", "relative");
+      wrp.append(`<button type="button" class="pwd-inpt-tggl"></button>`);
+      inpt.addClass("pwd-tggl-tgt");
+    }
+    $(document).on("click", ".pwd-inpt-tggl", function(){
+      let btn = $(this);
+      let inpt = btn.parent().find("input.pwd-tggl-tgt");
+      if (inpt.length) {
+        if (btn.hasClass("visible")) {
+          inpt.attr("type", "password");
+          btn.removeClass("visible");
+        } else {
+          inpt.attr("type", "text");
+          btn.addClass("visible");
+        }
+      }
+    });
+  }
 })();

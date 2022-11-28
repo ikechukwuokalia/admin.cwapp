@@ -40,6 +40,7 @@ if ($user_min_age = setting_get_value("SYSTEM", "USER.MIN-AGE", get_constant("PR
   <link rel="stylesheet" href="/app/cataliwos/dashui.cwapp/css/dashui.min.css">
   <link rel="stylesheet" href="/app/ikechukwuokalia/helper.cwapp/css/helper.min.css">
   <link rel="stylesheet" href="/assets/css/base.min.css">
+  <link rel="stylesheet" href="/app/ikechukwuokalia/admin.cwapp/css/admin.min.css">
   <script type="text/javascript">
     if (typeof window["param"] == undefined || !window["param"]) window["param"] = {};
     <?php if (!empty($params) && \is_array($params)) { foreach ($params as $k=>$val) { echo "param['{$k}'] = '{$val}';"; } } ?>

@@ -71,7 +71,7 @@ $navs = get_domainnav($work_domain);
   <script src="/app/cataliwos/dashui.cwapp/js/dashui.min.js"></script>
   <script src="/app/cataliwos/plugin.cwapp/js/theme.min.js"></script>
   <script src="/assets/js/base.min.js"></script>
-  <script src="/app/admin/js/admin.js"></script>
+  <script src="/app/admin/js/admin.min.js"></script>
   <script>
   </script>
 </body>
