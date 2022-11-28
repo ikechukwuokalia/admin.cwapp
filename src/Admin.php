@@ -49,7 +49,7 @@ class Admin{
     }
     if (!self::$_server_name = get_constant("PRJ_SERVER_NAME")) throw new \Exception("Server-name constant was not defined", 1);
     
-    if (!self::$_db_name = get_database(self::$_server_name, "admin")) throw new \Exception("[admin] type database not set for server [" .self::$_server_name . "]", 1);
+    if (!self::$_db_name = get_database("admin", self::$_server_name)) throw new \Exception("[admin] type database not set for server [" .self::$_server_name . "]", 1);
     global $database;
     $conn = $conn && $conn instanceof MySQLDatabase ? $conn : ($database && $database instanceof MySQLDatabase ? $database : false);
     $conn = query_conn(self::$_server_name, $conn);
@@ -62,7 +62,7 @@ class Admin{
     $server_name = self::$_server_name = get_constant("PRJ_SERVER_NAME");
     $conn = query_conn($server_name, $database);
     self::_setConn($conn);
-    self::$_db_name = get_database(self::$_server_name, "admin");
+    self::$_db_name = get_database("admin", self::$_server_name);
     $prefix = self::$_prefix_code;
 
     $data = new Data();

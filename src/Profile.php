@@ -17,9 +17,9 @@ trait Profile {
   public function profile() {
     $conn =& static::$_conn;
 
-    $base_db = get_database(self::$_server_name, "base");
-    $data_db = get_database(self::$_server_name, "data");
-    $file_db = get_database(self::$_server_name, "file");
+    $base_db = get_database("base", self::$_server_name);
+    $data_db = get_database("data", self::$_server_name);
+    $file_db = get_database("file", self::$_server_name);
     $file_tbl = "file_meta";
     $file_server = get_constant("PRJ_FILE_SERVER");
     $sql = "SELECT adm.`code`, adm.`status`, adm.work_group,
