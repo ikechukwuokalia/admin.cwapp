@@ -192,7 +192,7 @@ class Admin{
       // get ready to create
       // get ranked access
       $db_cred = \db_cred(self::$_server_name, "DEVELOPER");
-      $conn = new MySQLDatabase(\get_dbserver(self::$_server_name), $db_cred[0], $db_cred[1], self::$_table_name);
+      $conn = new MySQLDatabase(\get_dbserver(self::$_server_name), $db_cred[0], $db_cred[1], self::$_db_name);
       self::$_conn = $conn;
       $this->password = Data::pwdHash($password);
       $this->code = generate_code(self::$_prefix_code, Data::RAND_NUMBERS, self::$_code_length, $this, "code", true);
